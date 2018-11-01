@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 public abstract class Result<T, E> {
 
@@ -37,8 +36,6 @@ public abstract class Result<T, E> {
     public abstract boolean isError();
 
     public abstract void ifError(final Consumer<E> consumer);
-
-    public abstract Result<T, E> map(final UnaryOperator<T> mapper);
 
     public abstract <U> Result<U, E> map(final Function<? super T, ? extends U> mapper);
 
@@ -78,12 +75,6 @@ public abstract class Result<T, E> {
 
         @Override
         public void ifError(final Consumer<E> consumer) {
-        }
-
-        @Override
-        public Result<T, E> map(final UnaryOperator<T> mapper) {
-            Objects.requireNonNull(mapper);
-            return ok(mapper.apply(value));
         }
 
         @Override
@@ -165,11 +156,6 @@ public abstract class Result<T, E> {
         public void ifError(final Consumer<E> consumer) {
             Objects.requireNonNull(consumer);
             consumer.accept(error);
-        }
-
-        @Override
-        public Result<T, E> map(final UnaryOperator<T> mapper) {
-            return this;
         }
 
         @Override

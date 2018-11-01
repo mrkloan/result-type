@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -77,19 +76,7 @@ public class ErrorTest {
     }
 
     @Test
-    public void should_get_the_same_result_when_trying_to_unary_map_an_error_result() {
-        //noinspection unchecked
-        final UnaryOperator<Integer> mapper = (UnaryOperator<Integer>) mock(UnaryOperator.class);
-        final Result<Integer, String> initialResult = Result.error("Error");
-
-        final Result<Integer, String> mappedResult = initialResult.map(mapper);
-
-        verify(mapper, never()).apply(anyInt());
-        assertThat(mappedResult).isEqualTo(initialResult);
-    }
-
-    @Test
-    public void should_get_the_same_result_when_trying_to_function_map_an_error_result() {
+    public void should_get_the_same_result_when_trying_to_map_an_error_result() {
         //noinspection unchecked
         final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
         final Result<Integer, String> initialResult = Result.error("Error");

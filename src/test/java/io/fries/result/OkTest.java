@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -77,26 +76,6 @@ public class OkTest {
     }
 
     @Test
-    public void should_map_the_wrapped_value_without_changing_its_type() {
-        final int value = 1;
-        final int expectedValue = 2;
-        //noinspection unchecked
-        final UnaryOperator<Integer> mapper = (UnaryOperator<Integer>) mock(UnaryOperator.class);
-        final Result<Integer, ?> initialResult = Result.ok(value);
-
-        when(mapper.apply(value)).thenReturn(expectedValue);
-        final Result<Integer, ?> mappedResult = initialResult.map(mapper);
-
-        verify(mapper).apply(value);
-        assertThat(mappedResult).isEqualTo(Result.ok(expectedValue));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void should_throw_when_the_provided_mapper_reference_is_null_for_unary_operator_mapping() {
-        Result.ok(1).map(null);
-    }
-
-    @Test
     public void should_map_the_wrapped_value_to_another_type() {
         final int value = 1;
         final String expectedValue = "1";
@@ -112,9 +91,8 @@ public class OkTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void should_throw_when_the_provided_mapper_reference_is_null_for_function_mapping() {
-        final Function<Integer, String> mapper = null;
-        Result.ok(1).map(mapper);
+    public void should_throw_when_the_provided_mapper_reference_is_null() {
+        Result.ok(1).map(null);
     }
 
     @Test
