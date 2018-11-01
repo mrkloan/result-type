@@ -150,7 +150,7 @@ abstract class Result<T, E> {
 
         @Override
         <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
-            throw new UnsupportedOperationException();
+            return error(error);
         }
 
         @Override

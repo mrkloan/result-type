@@ -96,4 +96,16 @@ public class ErrorTest {
         verify(mapper, never()).apply(anyInt());
         assertThat(mappedResult).isEqualTo(initialResult);
     }
+
+    @Test
+    public void should_get_the_same_result_when_trying_to_flat_map_an_error_result() {
+        //noinspection unchecked
+        final Function<Integer, Result<String, String>> mapper = (Function<Integer, Result<String, String>>) mock(Function.class);
+        final Result<Integer, String> initialResult = Result.error("Error");
+
+        final Result<String, String> mappedResult = initialResult.flatMap(mapper);
+
+        verify(mapper, never()).apply(anyInt());
+        assertThat(mappedResult).isEqualTo(initialResult);
+    }
 }
