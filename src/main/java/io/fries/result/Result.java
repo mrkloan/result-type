@@ -137,7 +137,7 @@ abstract class Result<T, E> {
 
         @Override
         <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
-            throw new UnsupportedOperationException();
+            return error(error);
         }
 
         @Override
