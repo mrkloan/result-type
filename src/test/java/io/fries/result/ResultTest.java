@@ -19,4 +19,9 @@ public class ResultTest {
 
         assertThat(result).isEqualTo(Result.ok(1L));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_providing_a_null_reference_to_an_ok_result() {
+        Result.ok(null);
+    }
 }

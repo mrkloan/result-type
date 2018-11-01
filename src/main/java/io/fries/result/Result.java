@@ -11,6 +11,7 @@ class Result<T> {
     }
 
     static <T> Result<T> ok(final T value) {
+        Objects.requireNonNull(value);
         return new Result<>(value);
     }
 
