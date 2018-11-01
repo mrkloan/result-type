@@ -108,6 +108,7 @@ abstract class Result<T, E> {
 
         @Override
         void ifError(final Consumer<E> consumer) {
+            Objects.requireNonNull(consumer);
             consumer.accept(error);
         }
 

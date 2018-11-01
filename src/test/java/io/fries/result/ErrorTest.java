@@ -63,4 +63,11 @@ public class ErrorTest {
 
         verify(consumer).accept("Error");
     }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_a_null_reference_is_provided_as_the_error_consumer() {
+        final Result<?, String> result = Result.error("Error");
+
+        result.ifError(null);
+    }
 }
