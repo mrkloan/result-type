@@ -89,7 +89,7 @@ public class OkTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void should_throw_when_the_provided_mapper_reference_is_null() {
+    public void should_throw_when_the_provided_mapper_reference_is_null_for_unary_operator_mapping() {
         Result.ok(1).map(null);
     }
 
@@ -106,5 +106,11 @@ public class OkTest {
 
         verify(mapper).apply(value);
         assertThat(mappedResult).isEqualTo(Result.ok(expectedValue));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_the_provided_mapper_reference_is_null_for_function_mapping() {
+        final Function<Integer, String> mapper = null;
+        Result.ok(1).map(mapper);
     }
 }
