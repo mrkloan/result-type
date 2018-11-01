@@ -123,7 +123,7 @@ abstract class Result<T, E> {
 
         @Override
         Result<T, E> map(final UnaryOperator<T> mapper) {
-            throw new UnsupportedOperationException();
+            return this;
         }
 
         @Override

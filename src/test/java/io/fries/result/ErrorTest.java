@@ -3,6 +3,7 @@ package io.fries.result;
 import org.junit.Test;
 
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -69,5 +70,17 @@ public class ErrorTest {
         final Result<?, String> result = Result.error("Error");
 
         result.ifError(null);
+    }
+
+    @Test
+    public void should_return_the_current_instance_when_trying_to_map_an_error_result() {
+        //noinspection unchecked
+        final UnaryOperator<Integer> mapper = (UnaryOperator<Integer>) mock(UnaryOperator.class);
+        final Result<Integer, String> initialResult = Result.error("Error");
+
+        final Result<Integer, String> mappedResult = initialResult.map(mapper);
+
+        verify(mapper, never()).apply(anyInt());
+        assertThat(mappedResult).isEqualTo(initialResult);
     }
 }
