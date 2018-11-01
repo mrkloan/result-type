@@ -6,22 +6,22 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-abstract class Result<T, E> {
+public abstract class Result<T, E> {
 
     private Result() {
     }
 
-    static <T, E> Result<T, E> ok(final T value) {
+    public static <T, E> Result<T, E> ok(final T value) {
         Objects.requireNonNull(value);
         return new Ok<>(value);
     }
 
-    static <T, E> Result<T, E> error(final E error) {
+    public static <T, E> Result<T, E> error(final E error) {
         Objects.requireNonNull(error);
         return new Error<>(error);
     }
 
-    static <T, E> Result<T, E> ofNullable(final T value, final Supplier<E> errorSupplier) {
+    public static <T, E> Result<T, E> ofNullable(final T value, final Supplier<E> errorSupplier) {
         Objects.requireNonNull(errorSupplier);
 
         return Objects.nonNull(value)
@@ -29,21 +29,23 @@ abstract class Result<T, E> {
                 : error(errorSupplier.get());
     }
 
-    abstract boolean isOk();
+    public abstract boolean isOk();
 
-    abstract void ifOk(final Consumer<T> consumer);
+    public abstract void ifOk(final Consumer<T> consumer);
 
-    abstract boolean isError();
+    public abstract boolean isError();
 
-    abstract void ifError(final Consumer<E> consumer);
+    public abstract void ifError(final Consumer<E> consumer);
 
-    abstract Result<T, E> map(final UnaryOperator<T> mapper);
+    public abstract Result<T, E> map(final UnaryOperator<T> mapper);
 
-    abstract <U> Result<U, E> map(final Function<? super T, ? extends U> mapper);
+    public abstract <U> Result<U, E> map(final Function<? super T, ? extends U> mapper);
 
-    abstract <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper);
+    public abstract <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper);
 
-    abstract <F> Result<T, F> mapError(final Function<E, F> mapper);
+    public abstract <F> Result<T, F> mapError(final Function<E, F> mapper);
+
+    public abstract T get();
 
     private static class Ok<T, E> extends Result<T, E> {
 
@@ -54,46 +56,51 @@ abstract class Result<T, E> {
         }
 
         @Override
-        boolean isOk() {
+        public boolean isOk() {
             return true;
         }
 
         @Override
-        void ifOk(final Consumer<T> consumer) {
+        public void ifOk(final Consumer<T> consumer) {
             Objects.requireNonNull(consumer);
             consumer.accept(value);
         }
 
         @Override
-        boolean isError() {
+        public boolean isError() {
             return false;
         }
 
         @Override
-        void ifError(final Consumer<E> consumer) {
+        public void ifError(final Consumer<E> consumer) {
         }
 
         @Override
-        Result<T, E> map(final UnaryOperator<T> mapper) {
+        public Result<T, E> map(final UnaryOperator<T> mapper) {
             Objects.requireNonNull(mapper);
             return ok(mapper.apply(value));
         }
 
         @Override
-        <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
+        public <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
             Objects.requireNonNull(mapper);
             return ok(mapper.apply(value));
         }
 
         @Override
-        <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
+        public <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
             Objects.requireNonNull(mapper);
             return mapper.apply(value);
         }
 
         @Override
-        <F> Result<T, F> mapError(final Function<E, F> mapper) {
+        public <F> Result<T, F> mapError(final Function<E, F> mapper) {
             return ok(value);
+        }
+
+        @Override
+        public T get() {
+            return value;
         }
 
         @Override
@@ -126,44 +133,49 @@ abstract class Result<T, E> {
         }
 
         @Override
-        boolean isOk() {
+        public boolean isOk() {
             return false;
         }
 
         @Override
-        void ifOk(final Consumer<T> consumer) {
+        public void ifOk(final Consumer<T> consumer) {
         }
 
         @Override
-        boolean isError() {
+        public boolean isError() {
             return true;
         }
 
         @Override
-        void ifError(final Consumer<E> consumer) {
+        public void ifError(final Consumer<E> consumer) {
             Objects.requireNonNull(consumer);
             consumer.accept(error);
         }
 
         @Override
-        Result<T, E> map(final UnaryOperator<T> mapper) {
+        public Result<T, E> map(final UnaryOperator<T> mapper) {
             return this;
         }
 
         @Override
-        <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
+        public <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
             return error(error);
         }
 
         @Override
-        <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
+        public <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
             return error(error);
         }
 
         @Override
-        <F> Result<T, F> mapError(final Function<E, F> mapper) {
+        public <F> Result<T, F> mapError(final Function<E, F> mapper) {
             Objects.requireNonNull(mapper);
             return error(mapper.apply(error));
+        }
+
+        @Override
+        public T get() {
+            throw new UnsupportedOperationException();
         }
 
         @Override

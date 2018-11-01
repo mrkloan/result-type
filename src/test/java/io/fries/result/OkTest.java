@@ -144,4 +144,14 @@ public class OkTest {
         verify(mapper, never()).apply(anyInt());
         assertThat(mappedResult).isEqualTo(initialResult);
     }
+
+    @Test
+    public void should_get_the_wrapped_value() {
+        final int value = 1;
+        final Result<Integer, ?> result = Result.ok(1);
+
+        final int unwrappedValue = result.get();
+
+        assertThat(unwrappedValue).isEqualTo(value);
+    }
 }
