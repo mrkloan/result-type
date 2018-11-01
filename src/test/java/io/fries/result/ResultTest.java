@@ -5,8 +5,7 @@ import org.junit.Test;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class ResultTest {
 
@@ -126,5 +125,16 @@ public class ResultTest {
         final Result<String> result = Result.ok("Value");
 
         result.ifOk(null);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void should_not_call_the_ok_consumer_when_the_result_is_an_error() {
+        final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
+        final Result<String> result = Result.error(new Throwable());
+
+        result.ifOk(consumer);
+
+        verify(consumer, times(0)).accept(anyString());
     }
 }
