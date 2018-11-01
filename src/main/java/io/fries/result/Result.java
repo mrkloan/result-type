@@ -115,7 +115,7 @@ public abstract class Result<T, E> {
 
         @Override
         public E getError() {
-            throw new UnsupportedOperationException();
+            throw new NoSuchElementException("Result is ok");
         }
 
         @Override

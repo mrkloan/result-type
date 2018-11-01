@@ -2,12 +2,14 @@ package io.fries.result;
 
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -167,5 +169,16 @@ public class OkTest {
 
         verify(supplier, never()).get();
         assertThat(unwrappedValue).isEqualTo(value);
+    }
+
+    @Test
+    public void should_throw_when_trying_to_unwrap_the_error() {
+        final Result<Integer, String> result = Result.ok(1);
+
+        final Throwable throwable = catchThrowable(result::getError);
+
+        assertThat(throwable)
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("Result is ok");
     }
 }
