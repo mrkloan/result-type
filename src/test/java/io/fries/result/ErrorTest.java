@@ -122,4 +122,9 @@ public class ErrorTest {
         verify(mapper).apply(error);
         assertThat(mappedResult).isEqualTo(Result.error("1"));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_the_provided_error_mapper_reference_is_null() {
+        Result.error("Error").mapError(null);
+    }
 }

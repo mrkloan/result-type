@@ -162,6 +162,7 @@ abstract class Result<T, E> {
 
         @Override
         <F> Result<T, F> mapError(final Function<E, F> mapper) {
+            Objects.requireNonNull(mapper);
             return error(mapper.apply(error));
         }
 
