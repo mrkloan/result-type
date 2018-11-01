@@ -2,20 +2,28 @@ package io.fries.result;
 
 import org.junit.Test;
 
+import java.util.function.Consumer;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class ResultTest {
 
     @Test
     public void should_create_an_ok_result_instance_wrapping_an_integer() {
-        final Result result = Result.ok(1);
+        final int value = 1;
+
+        final Result<Integer> result = Result.ok(value);
 
         assertThat(result).isEqualTo(Result.ok(1));
     }
 
     @Test
     public void should_create_an_ok_result_instance_wrapping_a_long() {
-        final Result result = Result.ok(1L);
+        final long value = 1L;
+
+        final Result<Long> result = Result.ok(value);
 
         assertThat(result).isEqualTo(Result.ok(1L));
     }
@@ -50,14 +58,18 @@ public class ResultTest {
 
     @Test
     public void should_create_an_ok_result_when_the_provided_value_is_not_null() {
-        final Result result = Result.ofNullable("Value");
+        final String value = "Value";
+
+        final Result<String> result = Result.ofNullable(value);
 
         assertThat(result).isEqualTo(Result.ok("Value"));
     }
 
     @Test
     public void should_create_an_error_result_when_the_provided_value_is_null() {
-        final Result result = Result.ofNullable(null);
+        final Object value = null;
+
+        final Result result = Result.ofNullable(value);
 
         assertThat(result.isError()).isTrue();
     }
@@ -66,27 +78,46 @@ public class ResultTest {
     public void should_be_true_when_the_result_is_an_error_result() {
         final Result result = Result.error(new Throwable());
 
-        assertThat(result.isError()).isTrue();
+        final boolean isError = result.isError();
+
+        assertThat(isError).isTrue();
     }
 
     @Test
     public void should_be_false_when_the_result_is_an_ok_result() {
         final Result result = Result.ok("Value");
 
-        assertThat(result.isError()).isFalse();
+        final boolean isError = result.isError();
+
+        assertThat(isError).isFalse();
     }
 
     @Test
     public void should_be_true_when_the_result_is_an_ok_result() {
         final Result result = Result.ok("Value");
 
-        assertThat(result.isOk()).isTrue();
+        final boolean isOk = result.isOk();
+
+        assertThat(isOk).isTrue();
     }
 
     @Test
     public void should_be_false_when_the_result_is_an_error_result() {
         final Result result = Result.error(new Throwable());
 
-        assertThat(result.isOk()).isFalse();
+        final boolean isOk = result.isOk();
+
+        assertThat(isOk).isFalse();
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void should_consume_the_value_of_an_ok_result() {
+        final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
+        final Result result = Result.ok("Value");
+
+        result.ifOk(consumer);
+
+        verify(consumer).accept("Value");
     }
 }

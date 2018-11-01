@@ -1,32 +1,38 @@
 package io.fries.result;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
-abstract class Result {
+abstract class Result<T> {
 
     private Result() {
     }
 
-    static <T> Result ok(final T value) {
+    static <T> Result<T> ok(final T value) {
         Objects.requireNonNull(value);
         return new Ok<>(value);
     }
 
-    static <E extends Throwable> Result error(final E error) {
+    @SuppressWarnings("unchecked")
+    static <T, E extends Throwable> Result<T> error(final E error) {
         Objects.requireNonNull(error);
         return new Error<>(error);
     }
 
-    static <T> Result ofNullable(final T value) {
+    @SuppressWarnings("unchecked")
+    static <T> Result<T> ofNullable(final T value) {
         return Objects.nonNull(value)
                 ? new Ok<>(value)
                 : new Error<>(new NullPointerException());
     }
 
     abstract boolean isOk();
+
+    abstract void ifOk(final Consumer<T> consumer);
+
     abstract boolean isError();
 
-    private static class Ok<T> extends Result {
+    private static class Ok<T> extends Result<T> {
 
         private final T value;
 
@@ -37,6 +43,11 @@ abstract class Result {
         @Override
         boolean isOk() {
             return true;
+        }
+
+        @Override
+        void ifOk(final Consumer<T> consumer) {
+            consumer.accept(value);
         }
 
         @Override
@@ -76,6 +87,10 @@ abstract class Result {
         @Override
         boolean isOk() {
             return false;
+        }
+
+        @Override
+        void ifOk(final Consumer consumer) {
         }
 
         @Override
