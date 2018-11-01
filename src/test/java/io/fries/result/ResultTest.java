@@ -24,4 +24,11 @@ public class ResultTest {
     public void should_throw_when_providing_a_null_reference_to_an_ok_result() {
         Result.ok(null);
     }
+
+    @Test
+    public void should_create_an_error_result_instance_wrapping_a_throwable() {
+        final Result<Integer> result = Result.error(new Throwable());
+
+        assertThat(result).isEqualTo(Result.error(new Throwable()));
+    }
 }
