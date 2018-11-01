@@ -2,6 +2,7 @@ package io.fries.result;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -38,6 +39,8 @@ abstract class Result<T, E> {
 
     abstract Result<T, E> map(final UnaryOperator<T> mapper);
 
+    abstract <U> Result<U, E> map(final Function<? super T, ? extends U> mapper);
+
     private static class Ok<T, E> extends Result<T, E> {
 
         private final T value;
@@ -69,6 +72,11 @@ abstract class Result<T, E> {
         @Override
         Result<T, E> map(final UnaryOperator<T> mapper) {
             Objects.requireNonNull(mapper);
+            return ok(mapper.apply(value));
+        }
+
+        @Override
+        <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
             return ok(mapper.apply(value));
         }
 
@@ -124,6 +132,11 @@ abstract class Result<T, E> {
         @Override
         Result<T, E> map(final UnaryOperator<T> mapper) {
             return this;
+        }
+
+        @Override
+        <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
+            throw new UnsupportedOperationException();
         }
 
         @Override

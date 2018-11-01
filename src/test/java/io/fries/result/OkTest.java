@@ -3,6 +3,7 @@ package io.fries.result;
 import org.junit.Test;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -90,5 +91,20 @@ public class OkTest {
     @Test(expected = NullPointerException.class)
     public void should_throw_when_the_provided_mapper_reference_is_null() {
         Result.ok(1).map(null);
+    }
+
+    @Test
+    public void should_map_the_wrapped_value_to_another_type() {
+        final int value = 1;
+        final String expectedValue = "1";
+        //noinspection unchecked
+        final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
+        final Result<Integer, ?> initialResult = Result.ok(value);
+
+        when(mapper.apply(value)).thenReturn(expectedValue);
+        final Result<String, ?> mappedResult = initialResult.map(mapper);
+
+        verify(mapper).apply(value);
+        assertThat(mappedResult).isEqualTo(Result.ok(expectedValue));
     }
 }
