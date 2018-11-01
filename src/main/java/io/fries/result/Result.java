@@ -2,28 +2,29 @@ package io.fries.result;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-abstract class Result<T> {
+abstract class Result<T, E> {
 
     private Result() {
     }
 
-    static <T> Result<T> ok(final T value) {
+    static <T, E> Result<T, E> ok(final T value) {
         Objects.requireNonNull(value);
         return new Ok<>(value);
     }
 
-    @SuppressWarnings("unchecked")
-    static <T, E extends Throwable> Result<T> error(final E error) {
+    static <T, E> Result<T, E> error(final E error) {
         Objects.requireNonNull(error);
         return new Error<>(error);
     }
 
-    @SuppressWarnings("unchecked")
-    static <T> Result<T> ofNullable(final T value) {
+    static <T, E> Result<T, E> ofNullable(final T value, final Supplier<E> errorSupplier) {
+        Objects.requireNonNull(errorSupplier);
+
         return Objects.nonNull(value)
                 ? new Ok<>(value)
-                : new Error<>(new NullPointerException());
+                : new Error<>(errorSupplier.get());
     }
 
     abstract boolean isOk();
@@ -32,7 +33,7 @@ abstract class Result<T> {
 
     abstract boolean isError();
 
-    private static class Ok<T> extends Result<T> {
+    private static class Ok<T, E> extends Result<T, E> {
 
         private final T value;
 
@@ -60,7 +61,7 @@ abstract class Result<T> {
         public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            final Ok<?> ok = (Ok<?>) o;
+            final Ok<?, ?> ok = (Ok<?, ?>) o;
             return Objects.equals(value, ok.value);
         }
 
@@ -77,7 +78,7 @@ abstract class Result<T> {
         }
     }
 
-    private static class Error<E extends Throwable> extends Result {
+    private static class Error<T, E> extends Result<T, E> {
 
         private final E error;
 
@@ -91,7 +92,7 @@ abstract class Result<T> {
         }
 
         @Override
-        void ifOk(final Consumer consumer) {
+        void ifOk(final Consumer<T> consumer) {
         }
 
         @Override
@@ -103,7 +104,7 @@ abstract class Result<T> {
         public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            final Error<?> error1 = (Error<?>) o;
+            final Error<?, ?> error1 = (Error<?, ?>) o;
             return Objects.equals(error, error1.error);
         }
 
