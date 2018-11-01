@@ -2,16 +2,16 @@ package io.fries.result;
 
 import java.util.Objects;
 
-class Result {
+class Result<T> {
 
-    private final int value;
+    private final T value;
 
-    private Result(final int value) {
+    private Result(final T value) {
         this.value = value;
     }
 
-    static Result ok(final int value) {
-        return new Result(value);
+    static <T> Result<T> ok(final T value) {
+        return new Result<>(value);
     }
 
     @Override
