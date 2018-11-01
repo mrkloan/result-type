@@ -33,6 +33,8 @@ abstract class Result<T, E> {
 
     abstract boolean isError();
 
+    abstract void ifError(final Consumer<E> consumer);
+
     private static class Ok<T, E> extends Result<T, E> {
 
         private final T value;
@@ -55,6 +57,10 @@ abstract class Result<T, E> {
         @Override
         boolean isError() {
             return false;
+        }
+
+        @Override
+        void ifError(final Consumer<E> consumer) {
         }
 
         @Override
@@ -98,6 +104,11 @@ abstract class Result<T, E> {
         @Override
         boolean isError() {
             return true;
+        }
+
+        @Override
+        void ifError(final Consumer<E> consumer) {
+            throw new UnsupportedOperationException();
         }
 
         @Override

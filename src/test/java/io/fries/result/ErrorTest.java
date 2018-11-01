@@ -2,7 +2,11 @@ package io.fries.result;
 
 import org.junit.Test;
 
+import java.util.function.Consumer;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class ErrorTest {
 
@@ -36,5 +40,16 @@ public class ErrorTest {
         final boolean isOk = result.isOk();
 
         assertThat(isOk).isFalse();
+    }
+
+    @Test
+    public void should_not_call_the_ok_consumer() {
+        //noinspection unchecked
+        final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
+        final Result<String, ?> result = Result.error(new Throwable());
+
+        result.ifOk(consumer);
+
+        verify(consumer, never()).accept(anyString());
     }
 }

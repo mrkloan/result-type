@@ -61,13 +61,13 @@ public class OkTest {
     }
 
     @Test
-    public void should_not_call_the_ok_consumer_when_the_result_is_an_error() {
+    public void should_not_call_the_error_consumer() {
         //noinspection unchecked
         final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
-        final Result<String, ?> result = Result.error(new Throwable());
+        final Result<?, String> result = Result.ok("Value");
 
-        result.ifOk(consumer);
+        result.ifError(consumer);
 
-        verify(consumer, times(0)).accept(anyString());
+        verify(consumer, never()).accept(anyString());
     }
 }
