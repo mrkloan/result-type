@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -152,6 +153,19 @@ public class OkTest {
 
         final int unwrappedValue = result.get();
 
+        assertThat(unwrappedValue).isEqualTo(value);
+    }
+
+    @Test
+    public void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
+        //noinspection unchecked
+        final Supplier<Integer> supplier = (Supplier<Integer>) mock(Supplier.class);
+        final int value = 1;
+        final Result<Integer, ?> result = Result.ok(value);
+
+        final int unwrappedValue = result.getOrElse(supplier);
+
+        verify(supplier, never()).get();
         assertThat(unwrappedValue).isEqualTo(value);
     }
 }

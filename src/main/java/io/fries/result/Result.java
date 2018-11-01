@@ -48,6 +48,8 @@ public abstract class Result<T, E> {
 
     public abstract T get();
 
+    public abstract T getOrElse(final Supplier<T> supplier);
+
     private static class Ok<T, E> extends Result<T, E> {
 
         private final T value;
@@ -101,6 +103,11 @@ public abstract class Result<T, E> {
 
         @Override
         public T get() {
+            return value;
+        }
+
+        @Override
+        public T getOrElse(final Supplier<T> supplier) {
             return value;
         }
 
@@ -177,6 +184,11 @@ public abstract class Result<T, E> {
         @Override
         public T get() {
             throw new NoSuchElementException("Result is an error");
+        }
+
+        @Override
+        public T getOrElse(final Supplier<T> supplier) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
