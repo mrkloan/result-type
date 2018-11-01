@@ -108,4 +108,18 @@ public class ErrorTest {
         verify(mapper, never()).apply(anyInt());
         assertThat(mappedResult).isEqualTo(initialResult);
     }
+
+    @Test
+    public void should_map_the_wrapped_error_to_another_type() {
+        final int error = 1;
+        //noinspection unchecked
+        final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
+        final Result<String, Integer> initialResult = Result.error(error);
+
+        when(mapper.apply(error)).thenReturn("1");
+        final Result<String, String> mappedResult = initialResult.mapError(mapper);
+
+        verify(mapper).apply(error);
+        assertThat(mappedResult).isEqualTo(Result.error("1"));
+    }
 }
