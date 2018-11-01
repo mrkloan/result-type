@@ -63,9 +63,30 @@ public class ResultTest {
     }
 
     @Test
-    public void should_be_an_error_result() {
+    public void should_be_true_when_the_result_is_an_error_result() {
         final Result result = Result.error(new Throwable());
 
         assertThat(result.isError()).isTrue();
+    }
+
+    @Test
+    public void should_be_false_when_the_result_is_an_ok_result() {
+        final Result result = Result.ok("Value");
+
+        assertThat(result.isError()).isFalse();
+    }
+
+    @Test
+    public void should_be_true_when_the_result_is_an_ok_result() {
+        final Result result = Result.ok("Value");
+
+        assertThat(result.isOk()).isTrue();
+    }
+
+    @Test
+    public void should_be_false_when_the_result_is_an_error_result() {
+        final Result result = Result.error(new Throwable());
+
+        assertThat(result.isOk()).isFalse();
     }
 }

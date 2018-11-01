@@ -23,6 +23,7 @@ abstract class Result {
                 : new Error<>(new NullPointerException());
     }
 
+    abstract boolean isOk();
     abstract boolean isError();
 
     private static class Ok<T> extends Result {
@@ -31,6 +32,11 @@ abstract class Result {
 
         private Ok(final T value) {
             this.value = value;
+        }
+
+        @Override
+        boolean isOk() {
+            return true;
         }
 
         @Override
@@ -65,6 +71,11 @@ abstract class Result {
 
         private Error(final E error) {
             this.error = error;
+        }
+
+        @Override
+        boolean isOk() {
+            return false;
         }
 
         @Override
