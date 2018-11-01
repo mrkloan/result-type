@@ -17,6 +17,10 @@ class Result {
         return new Error<>(error);
     }
 
+    static <T> Result ofNullable(final T value) {
+        return new Ok<>(value);
+    }
+
     private static class Ok<T> extends Result {
 
         private final T value;

@@ -47,4 +47,13 @@ public class ResultTest {
     public void should_throw_when_providing_a_null_reference_to_an_error_result() {
         Result.error(null);
     }
+
+    @Test
+    public void should_create_an_ok_result_when_the_provided_value_is_not_null() {
+        final String value = "Value";
+
+        final Result result = Result.ofNullable(value);
+
+        assertThat(result).isEqualTo(Result.ok("Value"));
+    }
 }
