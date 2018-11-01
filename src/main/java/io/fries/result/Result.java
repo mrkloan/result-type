@@ -13,6 +13,7 @@ class Result {
     }
 
     static <E extends Throwable> Result error(final E error) {
+        Objects.requireNonNull(error);
         return new Error<>(error);
     }
 

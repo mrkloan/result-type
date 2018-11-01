@@ -42,4 +42,9 @@ public class ResultTest {
 
         assertThat(result).isEqualTo(Result.error(error));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_providing_a_null_reference_to_an_error_result() {
+        Result.error(null);
+    }
 }
