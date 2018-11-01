@@ -93,7 +93,7 @@ abstract class Result<T, E> {
 
         @Override
         <F> Result<T, F> mapError(final Function<E, F> mapper) {
-            throw new UnsupportedOperationException();
+            return ok(value);
         }
 
         @Override

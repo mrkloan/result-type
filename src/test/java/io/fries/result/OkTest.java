@@ -132,4 +132,16 @@ public class OkTest {
     public void should_throw_when_the_provided_flat_mapper_reference_is_null() {
         Result.ok(1).flatMap(null);
     }
+
+    @Test
+    public void should_get_the_same_result_when_trying_to_map_an_error_result() {
+        //noinspection unchecked
+        final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
+        final Result<String, Integer> initialResult = Result.ok("Value");
+
+        final Result<String, String> mappedResult = initialResult.mapError(mapper);
+
+        verify(mapper, never()).apply(anyInt());
+        assertThat(mappedResult).isEqualTo(initialResult);
+    }
 }
