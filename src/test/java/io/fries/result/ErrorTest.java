@@ -52,4 +52,15 @@ public class ErrorTest {
 
         verify(consumer, never()).accept(anyString());
     }
+
+    @Test
+    public void should_consume_the_value_of_an_error_result() {
+        //noinspection unchecked
+        final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
+        final Result<?, String> result = Result.error("Error");
+
+        result.ifError(consumer);
+
+        verify(consumer).accept("Error");
+    }
 }

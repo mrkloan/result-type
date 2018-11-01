@@ -108,7 +108,7 @@ abstract class Result<T, E> {
 
         @Override
         void ifError(final Consumer<E> consumer) {
-            throw new UnsupportedOperationException();
+            consumer.accept(error);
         }
 
         @Override
