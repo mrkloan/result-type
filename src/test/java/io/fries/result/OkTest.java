@@ -127,4 +127,9 @@ public class OkTest {
         verify(mapper).apply(value);
         assertThat(mappedResult).isEqualTo(Result.ok("1"));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_the_provided_flat_mapper_reference_is_null() {
+        Result.ok(1).flatMap(null);
+    }
 }

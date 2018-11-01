@@ -85,6 +85,7 @@ abstract class Result<T, E> {
 
         @Override
         <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
+            Objects.requireNonNull(mapper);
             return mapper.apply(value);
         }
 
