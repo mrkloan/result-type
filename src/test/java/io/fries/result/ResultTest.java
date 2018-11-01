@@ -8,14 +8,14 @@ public class ResultTest {
 
     @Test
     public void should_create_an_ok_result_instance_wrapping_an_integer() {
-        final Result<Integer> result = Result.ok(1);
+        final Result result = Result.ok(1);
 
         assertThat(result).isEqualTo(Result.ok(1));
     }
 
     @Test
     public void should_create_an_ok_result_instance_wrapping_a_long() {
-        final Result<Long> result = Result.ok(1L);
+        final Result result = Result.ok(1L);
 
         assertThat(result).isEqualTo(Result.ok(1L));
     }
@@ -27,8 +27,19 @@ public class ResultTest {
 
     @Test
     public void should_create_an_error_result_instance_wrapping_a_throwable() {
-        final Result<Integer> result = Result.error(new Throwable());
+        final Throwable error = new Throwable();
 
-        assertThat(result).isEqualTo(Result.error(new Throwable()));
+        final Result result = Result.error(error);
+
+        assertThat(result).isEqualTo(Result.error(error));
+    }
+
+    @Test
+    public void should_create_an_error_result_instance_wrapping_an_exception() {
+        final Exception error = new Exception();
+
+        final Result result = Result.error(error);
+
+        assertThat(result).isEqualTo(Result.error(error));
     }
 }
