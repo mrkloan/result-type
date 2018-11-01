@@ -68,6 +68,7 @@ abstract class Result<T, E> {
 
         @Override
         Result<T, E> map(final UnaryOperator<T> mapper) {
+            Objects.requireNonNull(mapper);
             return ok(mapper.apply(value));
         }
 

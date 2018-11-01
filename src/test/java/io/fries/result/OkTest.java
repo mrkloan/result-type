@@ -86,4 +86,9 @@ public class OkTest {
         verify(mapper).apply(value);
         assertThat(mappedResult).isEqualTo(Result.ok(expectedValue));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_the_provided_mapper_reference_is_null() {
+        Result.ok(1).map(null);
+    }
 }
