@@ -3,6 +3,7 @@ package io.fries.result;
 import org.junit.Test;
 
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -69,5 +70,20 @@ public class OkTest {
         result.ifError(consumer);
 
         verify(consumer, never()).accept(anyString());
+    }
+
+    @Test
+    public void should_map_the_wrapped_value_without_changing_its_type() {
+        final int value = 1;
+        final int expectedValue = 2;
+        //noinspection unchecked
+        final UnaryOperator<Integer> mapper = (UnaryOperator<Integer>) mock(UnaryOperator.class);
+        final Result<Integer, ?> initialResult = Result.ok(value);
+
+        when(mapper.apply(value)).thenReturn(expectedValue);
+        final Result<Integer, ?> mappedResult = initialResult.map(mapper);
+
+        verify(mapper).apply(value);
+        assertThat(mappedResult).isEqualTo(Result.ok(expectedValue));
     }
 }

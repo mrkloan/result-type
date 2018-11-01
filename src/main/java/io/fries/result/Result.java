@@ -3,6 +3,7 @@ package io.fries.result;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 abstract class Result<T, E> {
 
@@ -23,8 +24,8 @@ abstract class Result<T, E> {
         Objects.requireNonNull(errorSupplier);
 
         return Objects.nonNull(value)
-                ? new Ok<>(value)
-                : new Error<>(errorSupplier.get());
+                ? ok(value)
+                : error(errorSupplier.get());
     }
 
     abstract boolean isOk();
@@ -34,6 +35,8 @@ abstract class Result<T, E> {
     abstract boolean isError();
 
     abstract void ifError(final Consumer<E> consumer);
+
+    abstract Result<T, E> map(final UnaryOperator<T> mapper);
 
     private static class Ok<T, E> extends Result<T, E> {
 
@@ -61,6 +64,11 @@ abstract class Result<T, E> {
 
         @Override
         void ifError(final Consumer<E> consumer) {
+        }
+
+        @Override
+        Result<T, E> map(final UnaryOperator<T> mapper) {
+            return ok(mapper.apply(value));
         }
 
         @Override
@@ -110,6 +118,11 @@ abstract class Result<T, E> {
         void ifError(final Consumer<E> consumer) {
             Objects.requireNonNull(consumer);
             consumer.accept(error);
+        }
+
+        @Override
+        Result<T, E> map(final UnaryOperator<T> mapper) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
