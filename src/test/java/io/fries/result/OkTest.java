@@ -148,7 +148,7 @@ public class OkTest {
     @Test
     public void should_get_the_wrapped_value() {
         final int value = 1;
-        final Result<Integer, ?> result = Result.ok(1);
+        final Result<Integer, ?> result = Result.ok(value);
 
         final int unwrappedValue = result.get();
 

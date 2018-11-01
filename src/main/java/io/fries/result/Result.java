@@ -1,5 +1,6 @@
 package io.fries.result;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -175,7 +176,7 @@ public abstract class Result<T, E> {
 
         @Override
         public T get() {
-            throw new UnsupportedOperationException();
+            throw new NoSuchElementException("Result is an error");
         }
 
         @Override
