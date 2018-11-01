@@ -13,7 +13,7 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.MrKloan:reflection:1.0'
+	implementation 'com.github.MrKloan:result-type:1.0'
 }
 ```
 
@@ -29,7 +29,7 @@ Maven:
 <dependencies>
 	<dependency>
 		<groupId>com.github.MrKloan</groupId>
-		<artifactId>reflection</artifactId>
+		<artifactId>result-type</artifactId>
 		<version>1.0</version>
 	</dependency>
 </dependencies>
