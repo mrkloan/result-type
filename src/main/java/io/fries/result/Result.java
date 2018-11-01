@@ -47,6 +47,7 @@ abstract class Result<T> {
 
         @Override
         void ifOk(final Consumer<T> consumer) {
+            Objects.requireNonNull(consumer);
             consumer.accept(value);
         }
 

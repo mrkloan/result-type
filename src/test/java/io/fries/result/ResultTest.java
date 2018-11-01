@@ -114,10 +114,17 @@ public class ResultTest {
     @SuppressWarnings("unchecked")
     public void should_consume_the_value_of_an_ok_result() {
         final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
-        final Result result = Result.ok("Value");
+        final Result<String> result = Result.ok("Value");
 
         result.ifOk(consumer);
 
         verify(consumer).accept("Value");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_a_null_reference_is_provided_as_the_ok_consumer() {
+        final Result<String> result = Result.ok("Value");
+
+        result.ifOk(null);
     }
 }
