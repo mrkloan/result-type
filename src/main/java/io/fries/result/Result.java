@@ -41,6 +41,8 @@ abstract class Result<T, E> {
 
     abstract <U> Result<U, E> map(final Function<? super T, ? extends U> mapper);
 
+    abstract <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper);
+
     private static class Ok<T, E> extends Result<T, E> {
 
         private final T value;
@@ -79,6 +81,11 @@ abstract class Result<T, E> {
         <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
             Objects.requireNonNull(mapper);
             return ok(mapper.apply(value));
+        }
+
+        @Override
+        <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
+            return mapper.apply(value);
         }
 
         @Override
@@ -138,6 +145,11 @@ abstract class Result<T, E> {
         @Override
         <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
             return error(error);
+        }
+
+        @Override
+        <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
+            throw new UnsupportedOperationException();
         }
 
         @Override

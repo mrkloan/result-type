@@ -113,4 +113,18 @@ public class OkTest {
         final Function<Integer, String> mapper = null;
         Result.ok(1).map(mapper);
     }
+
+    @Test
+    public void should_flat_map_the_wrapped_result() {
+        final int value = 1;
+        //noinspection unchecked
+        final Function<Integer, Result<String, String>> mapper = (Function<Integer, Result<String, String>>) mock(Function.class);
+        final Result<Integer, String> initialResult = Result.ok(value);
+
+        when(mapper.apply(value)).thenReturn(Result.ok("1"));
+        final Result<String, String> mappedResult = initialResult.flatMap(mapper);
+
+        verify(mapper).apply(value);
+        assertThat(mappedResult).isEqualTo(Result.ok("1"));
+    }
 }
