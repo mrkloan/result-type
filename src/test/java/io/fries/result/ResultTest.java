@@ -61,4 +61,11 @@ public class ResultTest {
 
         assertThat(result.isError()).isTrue();
     }
+
+    @Test
+    public void should_be_an_error_result() {
+        final Result result = Result.error(new Throwable());
+
+        assertThat(result.isError()).isTrue();
+    }
 }
