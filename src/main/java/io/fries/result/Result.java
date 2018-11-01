@@ -50,6 +50,8 @@ public abstract class Result<T, E> {
 
     public abstract T getOrElse(final Supplier<T> supplier);
 
+    public abstract E getError();
+
     private static class Ok<T, E> extends Result<T, E> {
 
         private final T value;
@@ -109,6 +111,11 @@ public abstract class Result<T, E> {
         @Override
         public T getOrElse(final Supplier<T> supplier) {
             return value;
+        }
+
+        @Override
+        public E getError() {
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -190,6 +197,11 @@ public abstract class Result<T, E> {
         public T getOrElse(final Supplier<T> supplier) {
             Objects.requireNonNull(supplier);
             return supplier.get();
+        }
+
+        @Override
+        public E getError() {
+            return error;
         }
 
         @Override

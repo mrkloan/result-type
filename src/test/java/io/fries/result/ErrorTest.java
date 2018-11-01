@@ -160,4 +160,14 @@ public class ErrorTest {
     public void should_throw_when_the_supplier_fallback_is_a_null_reference() {
         Result.error("Error").getOrElse(null);
     }
+
+    @Test
+    public void should_unwrap_the_error() {
+        final String errorMessage = "Error";
+        final Result<?, String> result = Result.error(errorMessage);
+
+        final String error = result.getError();
+
+        assertThat(error).isEqualTo(errorMessage);
+    }
 }
