@@ -188,7 +188,8 @@ public abstract class Result<T, E> {
 
         @Override
         public T getOrElse(final Supplier<T> supplier) {
-            throw new UnsupportedOperationException();
+            Objects.requireNonNull(supplier);
+            return supplier.get();
         }
 
         @Override

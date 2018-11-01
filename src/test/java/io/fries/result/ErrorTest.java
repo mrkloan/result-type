@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -139,5 +140,24 @@ public class ErrorTest {
         assertThat(throwable)
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("Result is an error");
+    }
+
+    @Test
+    public void should_get_the_supplied_fallback_value_when_trying_to_unwrap_the_result() {
+        //noinspection unchecked
+        final Supplier<Integer> supplier = (Supplier<Integer>) mock(Supplier.class);
+        final int value = 1;
+        final Result<Integer, String> result = Result.error("Error");
+
+        when(supplier.get()).thenReturn(value);
+        final int unwrappedValue = result.getOrElse(supplier);
+
+        verify(supplier).get();
+        assertThat(unwrappedValue).isEqualTo(value);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_when_the_supplier_fallback_is_a_null_reference() {
+        Result.error("Error").getOrElse(null);
     }
 }
