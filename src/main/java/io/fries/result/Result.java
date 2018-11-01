@@ -2,7 +2,7 @@ package io.fries.result;
 
 import java.util.Objects;
 
-class Result {
+abstract class Result {
 
     private Result() {
     }
@@ -18,8 +18,12 @@ class Result {
     }
 
     static <T> Result ofNullable(final T value) {
-        return new Ok<>(value);
+        return Objects.nonNull(value)
+                ? new Ok<>(value)
+                : new Error<>(new NullPointerException());
     }
+
+    abstract boolean isError();
 
     private static class Ok<T> extends Result {
 
@@ -27,6 +31,11 @@ class Result {
 
         private Ok(final T value) {
             this.value = value;
+        }
+
+        @Override
+        boolean isError() {
+            return false;
         }
 
         @Override
@@ -56,6 +65,11 @@ class Result {
 
         private Error(final E error) {
             this.error = error;
+        }
+
+        @Override
+        boolean isError() {
+            return true;
         }
 
         @Override

@@ -50,10 +50,15 @@ public class ResultTest {
 
     @Test
     public void should_create_an_ok_result_when_the_provided_value_is_not_null() {
-        final String value = "Value";
-
-        final Result result = Result.ofNullable(value);
+        final Result result = Result.ofNullable("Value");
 
         assertThat(result).isEqualTo(Result.ok("Value"));
+    }
+
+    @Test
+    public void should_create_an_error_result_when_the_provided_value_is_null() {
+        final Result result = Result.ofNullable(null);
+
+        assertThat(result.isError()).isTrue();
     }
 }
