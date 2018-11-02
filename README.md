@@ -62,7 +62,7 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.MrKloan:result-type:1.0'
+	implementation 'com.github.MrKloan:result-type:1.0.0'
 }
 ```
 
@@ -79,7 +79,7 @@ Maven:
 	<dependency>
 		<groupId>com.github.MrKloan</groupId>
 		<artifactId>result-type</artifactId>
-		<version>1.0</version>
+		<version>1.0.0</version>
 	</dependency>
 </dependencies>
 ```
