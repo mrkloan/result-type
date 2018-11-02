@@ -1,6 +1,8 @@
 # result-type
 > A Result type for the Java programming language.
 
+[![](https://jitpack.io/v/MrKloan/result-type.svg)](https://jitpack.io/#MrKloan/result-type)
+
 ## Usage
 
 Wrap a value of any type:
