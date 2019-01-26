@@ -47,8 +47,8 @@ public class ErrorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_not_call_the_ok_consumer() {
-        //noinspection unchecked
         final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
         final Result<String, ?> result = Result.error(new Throwable());
 
@@ -58,8 +58,8 @@ public class ErrorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_consume_the_value_of_an_error_result() {
-        //noinspection unchecked
         final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
         final Result<?, String> result = Result.error("Error");
 
@@ -76,8 +76,8 @@ public class ErrorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_get_the_same_result_when_trying_to_map_an_error_result() {
-        //noinspection unchecked
         final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
         final Result<Integer, String> initialResult = Result.error("Error");
 
@@ -88,8 +88,8 @@ public class ErrorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_get_the_same_result_when_trying_to_flat_map_an_error_result() {
-        //noinspection unchecked
         final Function<Integer, Result<String, String>> mapper = (Function<Integer, Result<String, String>>) mock(Function.class);
         final Result<Integer, String> initialResult = Result.error("Error");
 
@@ -100,9 +100,9 @@ public class ErrorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_map_the_wrapped_error_to_another_type() {
         final int error = 1;
-        //noinspection unchecked
         final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
         final Result<String, Integer> initialResult = Result.error(error);
 
@@ -130,8 +130,8 @@ public class ErrorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_get_the_supplied_fallback_value_when_trying_to_unwrap_the_result() {
-        //noinspection unchecked
         final Supplier<Integer> supplier = (Supplier<Integer>) mock(Supplier.class);
         final int value = 1;
         final Result<Integer, String> result = Result.error("Error");

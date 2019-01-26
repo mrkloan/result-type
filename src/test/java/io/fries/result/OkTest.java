@@ -47,8 +47,8 @@ public class OkTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_consume_the_value_of_an_ok_result() {
-        //noinspection unchecked
         final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
         final Result<String, ?> result = Result.ok("Value");
 
@@ -65,8 +65,8 @@ public class OkTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_not_call_the_error_consumer() {
-        //noinspection unchecked
         final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
         final Result<?, String> result = Result.ok("Value");
 
@@ -76,10 +76,10 @@ public class OkTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_map_the_wrapped_value_to_another_type() {
         final int value = 1;
         final String expectedValue = "1";
-        //noinspection unchecked
         final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
         final Result<Integer, ?> initialResult = Result.ok(value);
 
@@ -96,9 +96,9 @@ public class OkTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_flat_map_the_wrapped_result() {
         final int value = 1;
-        //noinspection unchecked
         final Function<Integer, Result<String, String>> mapper = (Function<Integer, Result<String, String>>) mock(Function.class);
         final Result<Integer, String> initialResult = Result.ok(value);
 
@@ -115,8 +115,8 @@ public class OkTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_get_the_same_result_when_trying_to_map_an_error_result() {
-        //noinspection unchecked
         final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
         final Result<String, Integer> initialResult = Result.ok("Value");
 
@@ -137,8 +137,8 @@ public class OkTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
-        //noinspection unchecked
         final Supplier<Integer> supplier = (Supplier<Integer>) mock(Supplier.class);
         final int value = 1;
         final Result<Integer, ?> result = Result.ok(value);
