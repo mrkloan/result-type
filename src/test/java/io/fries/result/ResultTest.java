@@ -29,7 +29,9 @@ class ResultTest {
     @Test
     void should_throw_when_providing_a_null_reference_to_an_ok_result() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> Result.ok(null));
+                .isThrownBy(() -> Result.ok(null))
+                .withNoCause()
+                .withMessage("The value of a Result cannot be null");
     }
 
     @Test
