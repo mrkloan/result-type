@@ -6,12 +6,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-class Error<T, E> implements Result<T, E> {
+class Error<T> implements Result<T> {
 
-    private final E error;
+    private final Throwable throwable;
 
-    Error(final E error) {
-        this.error = error;
+    Error(final Throwable throwable) {
+        this.throwable = throwable;
     }
 
     @Override
@@ -30,25 +30,25 @@ class Error<T, E> implements Result<T, E> {
     }
 
     @Override
-    public void ifError(final Consumer<E> consumer) {
+    public void ifError(final Consumer<Throwable> consumer) {
         Objects.requireNonNull(consumer);
-        consumer.accept(error);
+        consumer.accept(throwable);
     }
 
     @Override
-    public <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
-        return new Error<>(error);
+    public <U> Result<U> map(final Function<? super T, ? extends U> mapper) {
+        return new Error<>(throwable);
     }
 
     @Override
-    public <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
-        return new Error<>(error);
+    public <U> Result<U> flatMap(final Function<? super T, Result<U>> mapper) {
+        return new Error<>(throwable);
     }
 
     @Override
-    public <F> Result<T, F> mapError(final Function<E, F> mapper) {
+    public Result<T> mapError(final Function<Throwable, ? extends Throwable> mapper) {
         Objects.requireNonNull(mapper);
-        return new Error<>(mapper.apply(error));
+        return new Error<>(mapper.apply(throwable));
     }
 
     @Override
@@ -63,27 +63,27 @@ class Error<T, E> implements Result<T, E> {
     }
 
     @Override
-    public E getError() {
-        return error;
+    public Throwable getError() {
+        return throwable;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final io.fries.result.Error<?, ?> error1 = (io.fries.result.Error<?, ?>) o;
-        return Objects.equals(error, error1.error);
+        final Error<?> error = (Error<?>) o;
+        return Objects.equals(throwable, error.throwable);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(error);
+        return Objects.hash(throwable);
     }
 
     @Override
     public String toString() {
         return "Error{" +
-                "error=" + error +
+                "throwable=" + throwable +
                 '}';
     }
 }

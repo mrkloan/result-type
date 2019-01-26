@@ -5,19 +5,19 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface Result<T, E> {
+public interface Result<T> {
 
-    static <T, E> Result<T, E> ok(final T value) {
+    static <T> Result<T> ok(final T value) {
         Objects.requireNonNull(value);
         return new Ok<>(value);
     }
 
-    static <T, E> Result<T, E> error(final E error) {
-        Objects.requireNonNull(error);
-        return new Error<>(error);
+    static <T, E extends Throwable> Result<T> error(final E throwable) {
+        Objects.requireNonNull(throwable);
+        return new Error<>(throwable);
     }
 
-    static <T, E> Result<T, E> ofNullable(final T value, final Supplier<E> errorSupplier) {
+    static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {
         Objects.requireNonNull(errorSupplier);
 
         return Objects.nonNull(value)
@@ -31,17 +31,17 @@ public interface Result<T, E> {
 
     boolean isError();
 
-    void ifError(final Consumer<E> consumer);
+    void ifError(final Consumer<Throwable> consumer);
 
-    <U> Result<U, E> map(final Function<? super T, ? extends U> mapper);
+    <U> Result<U> map(final Function<? super T, ? extends U> mapper);
 
-    <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper);
+    <U> Result<U> flatMap(final Function<? super T, Result<U>> mapper);
 
-    <F> Result<T, F> mapError(final Function<E, F> mapper);
+    Result<T> mapError(final Function<Throwable, ? extends Throwable> mapper);
 
     T get();
 
     T getOrElse(final Supplier<T> supplier);
 
-    E getError();
+    Throwable getError();
 }

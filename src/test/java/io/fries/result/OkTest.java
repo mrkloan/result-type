@@ -1,6 +1,10 @@
 package io.fries.result;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -8,155 +12,135 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-public class OkTest {
+@ExtendWith(MockitoExtension.class)
+class OkTest {
 
-    @Test
-    public void should_create_an_ok_result_wrapping_the_provided_value() {
-        final String value = "Value";
+    @Mock
+    private Throwable value;
 
-        final Result<String, ?> result = Result.ok(value);
+    private Result<Object> result;
 
-        assertThat(result).isEqualTo(Result.ok("Value"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void should_throw_when_providing_a_null_reference_to_an_ok_result() {
-        Result.ok(null);
+    @BeforeEach
+    void setUp() {
+        this.result = new Ok<>(value);
     }
 
     @Test
-    public void should_be_false_when_the_result_is_an_ok_result() {
-        final Result result = Result.ok("Value");
-
-        final boolean isError = result.isError();
-
-        assertThat(isError).isFalse();
-    }
-
-    @Test
-    public void should_be_true_when_the_result_is_an_ok_result() {
-        final Result result = Result.ok("Value");
-
+    void should_be_true_when_the_result_is_an_ok_result() {
         final boolean isOk = result.isOk();
 
         assertThat(isOk).isTrue();
     }
 
     @Test
+    void should_be_false_when_the_result_is_an_ok_result() {
+        final boolean isError = result.isError();
+
+        assertThat(isError).isFalse();
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
-    public void should_consume_the_value_of_an_ok_result() {
-        final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
-        final Result<String, ?> result = Result.ok("Value");
+    void should_consume_the_value_of_an_ok_result() {
+        final Consumer<Object> consumer = (Consumer<Object>) mock(Consumer.class);
 
         result.ifOk(consumer);
 
-        verify(consumer).accept("Value");
+        verify(consumer).accept(value);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void should_throw_when_a_null_reference_is_provided_as_the_ok_consumer() {
-        final Result<String, ?> result = Result.ok("Value");
-
-        result.ifOk(null);
+    @Test
+    void should_throw_when_a_null_reference_is_provided_as_the_ok_consumer() {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> result.ifOk(null));
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_not_call_the_error_consumer() {
-        final Consumer<String> consumer = (Consumer<String>) mock(Consumer.class);
-        final Result<?, String> result = Result.ok("Value");
+    void should_not_call_the_error_consumer() {
+        final Consumer<Throwable> consumer = (Consumer<Throwable>) mock(Consumer.class);
 
         result.ifError(consumer);
 
-        verify(consumer, never()).accept(anyString());
+        verify(consumer, never()).accept(any());
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_map_the_wrapped_value_to_another_type() {
-        final int value = 1;
-        final String expectedValue = "1";
-        final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
-        final Result<Integer, ?> initialResult = Result.ok(value);
+    void should_map_the_wrapped_value_to_another_type() {
+        final Object mappedValue = mock(Object.class);
+        final Function<Object, Object> mapper = (Function<Object, Object>) mock(Function.class);
+        given(mapper.apply(value)).willReturn(mappedValue);
 
-        when(mapper.apply(value)).thenReturn(expectedValue);
-        final Result<String, ?> mappedResult = initialResult.map(mapper);
+        final Result<Object> mappedResult = result.map(mapper);
 
         verify(mapper).apply(value);
-        assertThat(mappedResult).isEqualTo(Result.ok(expectedValue));
+        assertThat(mappedResult).isEqualTo(new Ok<>(mappedValue));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void should_throw_when_the_provided_mapper_reference_is_null() {
-        Result.ok(1).map(null);
+    @Test
+    void should_throw_when_the_provided_mapper_reference_is_null() {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> result.map(null));
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_flat_map_the_wrapped_result() {
-        final int value = 1;
-        final Function<Integer, Result<String, String>> mapper = (Function<Integer, Result<String, String>>) mock(Function.class);
-        final Result<Integer, String> initialResult = Result.ok(value);
+    void should_flat_map_the_wrapped_result() {
+        final Object mappedValue = mock(Object.class);
+        final Function<Object, Result<Object>> mapper = (Function<Object, Result<Object>>) mock(Function.class);
+        given(mapper.apply(value)).willReturn(new Ok<>(mappedValue));
 
-        when(mapper.apply(value)).thenReturn(Result.ok("1"));
-        final Result<String, String> mappedResult = initialResult.flatMap(mapper);
+        final Result<Object> mappedResult = result.flatMap(mapper);
 
         verify(mapper).apply(value);
-        assertThat(mappedResult).isEqualTo(Result.ok("1"));
+        assertThat(mappedResult).isEqualTo(new Ok<>(mappedValue));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void should_throw_when_the_provided_flat_mapper_reference_is_null() {
-        Result.ok(1).flatMap(null);
+    @Test
+    void should_throw_when_the_provided_flat_mapper_reference_is_null() {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> result.flatMap(null));
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_get_the_same_result_when_trying_to_map_an_error_result() {
-        final Function<Integer, String> mapper = (Function<Integer, String>) mock(Function.class);
-        final Result<String, Integer> initialResult = Result.ok("Value");
+    void should_get_the_same_result_when_trying_to_map_an_error_result() {
+        final Function<Throwable, Throwable> mapper = (Function<Throwable, Throwable>) mock(Function.class);
 
-        final Result<String, String> mappedResult = initialResult.mapError(mapper);
+        final Result<Object> mappedResult = result.mapError(mapper);
 
-        verify(mapper, never()).apply(anyInt());
-        assertThat(mappedResult).isEqualTo(initialResult);
+        verify(mapper, never()).apply(any());
+        assertThat(mappedResult).isEqualTo(result);
     }
 
     @Test
-    public void should_get_the_wrapped_value() {
-        final int value = 1;
-        final Result<Integer, ?> result = Result.ok(value);
-
-        final int unwrappedValue = result.get();
+    void should_get_the_wrapped_value() {
+        final Object unwrappedValue = result.get();
 
         assertThat(unwrappedValue).isEqualTo(value);
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
-        final Supplier<Integer> supplier = (Supplier<Integer>) mock(Supplier.class);
-        final int value = 1;
-        final Result<Integer, ?> result = Result.ok(value);
+    void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
+        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
 
-        final int unwrappedValue = result.getOrElse(supplier);
+        final Object unwrappedValue = result.getOrElse(supplier);
 
         verify(supplier, never()).get();
         assertThat(unwrappedValue).isEqualTo(value);
     }
 
     @Test
-    public void should_throw_when_trying_to_unwrap_the_error() {
-        final Result<Integer, String> result = Result.ok(1);
-
-        final Throwable throwable = catchThrowable(result::getError);
-
-        assertThat(throwable)
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("Result is ok");
+    void should_throw_when_trying_to_unwrap_the_error() {
+        assertThatExceptionOfType(NoSuchElementException.class)
+                .isThrownBy(result::getError)
+                .withNoCause()
+                .withMessage("Result is ok");
     }
 }

@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-class Ok<T, E> implements Result<T, E> {
+class Ok<T> implements Result<T> {
 
     private final T value;
 
@@ -31,24 +31,24 @@ class Ok<T, E> implements Result<T, E> {
     }
 
     @Override
-    public void ifError(final Consumer<E> consumer) {
+    public void ifError(final Consumer<Throwable> consumer) {
         // Do nothing when trying to consume the error of an Ok result.
     }
 
     @Override
-    public <U> Result<U, E> map(final Function<? super T, ? extends U> mapper) {
+    public <U> Result<U> map(final Function<? super T, ? extends U> mapper) {
         Objects.requireNonNull(mapper);
         return new Ok<>(mapper.apply(value));
     }
 
     @Override
-    public <U> Result<U, E> flatMap(final Function<? super T, Result<U, E>> mapper) {
+    public <U> Result<U> flatMap(final Function<? super T, Result<U>> mapper) {
         Objects.requireNonNull(mapper);
         return mapper.apply(value);
     }
 
     @Override
-    public <F> Result<T, F> mapError(final Function<E, F> mapper) {
+    public Result<T> mapError(final Function<Throwable, ? extends Throwable> mapper) {
         return new Ok<>(value);
     }
 
@@ -63,7 +63,7 @@ class Ok<T, E> implements Result<T, E> {
     }
 
     @Override
-    public E getError() {
+    public Throwable getError() {
         throw new NoSuchElementException("Result is ok");
     }
 
@@ -71,7 +71,7 @@ class Ok<T, E> implements Result<T, E> {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final io.fries.result.Ok<?, ?> ok = (io.fries.result.Ok<?, ?>) o;
+        final Ok<?> ok = (Ok<?>) o;
         return Objects.equals(value, ok.value);
     }
 
