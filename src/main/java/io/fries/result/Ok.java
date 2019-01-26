@@ -38,6 +38,11 @@ class Ok<T> implements Result<T> {
     }
 
     @Override
+    public Result<T> switchIfError(final Supplier<Result<T>> fallbackSupplier) {
+        return new Ok<>(value);
+    }
+
+    @Override
     public <U> Result<U> map(final Function<? super T, ? extends U> mapper) {
         requireNonNull(mapper, "The value mapper cannot be null");
         return new Ok<>(mapper.apply(value));

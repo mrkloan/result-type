@@ -73,6 +73,17 @@ class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
+    void should_not_call_the_fallback_supplier() {
+        final Supplier<Result<Object>> supplier = (Supplier<Result<Object>>) mock(Supplier.class);
+
+        final Result<Object> fallbackResult = result.switchIfError(supplier);
+
+        verify(supplier, never()).get();
+        assertThat(fallbackResult).isEqualTo(result);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     void should_map_the_wrapped_value_to_another_type() {
         final Object mappedValue = mock(Object.class);
         final Function<Object, Object> mapper = (Function<Object, Object>) mock(Function.class);

@@ -45,6 +45,8 @@ public interface Result<T> {
 
     void ifError(final Consumer<Throwable> consumer);
 
+    Result<T> switchIfError(final Supplier<Result<T>> fallbackSupplier);
+
     <U> Result<U> map(final Function<? super T, ? extends U> mapper);
 
     <U> Result<U> flatMap(final Function<? super T, Result<U>> mapper);

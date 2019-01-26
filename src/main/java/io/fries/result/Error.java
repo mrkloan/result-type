@@ -42,6 +42,11 @@ class Error<T> implements Result<T> {
     }
 
     @Override
+    public Result<T> switchIfError(final Supplier<Result<T>> fallbackSupplier) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public <U> Result<U> map(final Function<? super T, ? extends U> mapper) {
         return new Error<>(throwable);
     }
