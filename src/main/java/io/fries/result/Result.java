@@ -20,7 +20,11 @@ public interface Result<T> {
     }
 
     static <T> Result<T> of(final Supplier<T> supplier) {
-        return ok(supplier.get());
+        try {
+            return ok(supplier.get());
+        } catch (final Exception error) {
+            return error(error);
+        }
     }
 
     static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {

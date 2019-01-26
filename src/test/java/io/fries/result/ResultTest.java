@@ -63,6 +63,18 @@ class ResultTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    void should_create_an_error_result_when_the_supplier_throws_an_exception() {
+        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
+        final Throwable error = mock(RuntimeException.class);
+        given(supplier.get()).willThrow(error);
+
+        final Result<Object> result = Result.of(supplier);
+
+        assertThat(result).isEqualTo(Result.error(error));
+    }
+
+    @Test
     void should_create_an_ok_result_when_the_provided_value_is_not_null() {
         final Supplier<Throwable> errorSupplier = NullPointerException::new;
 
