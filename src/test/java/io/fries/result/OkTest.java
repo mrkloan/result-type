@@ -56,7 +56,9 @@ class OkTest {
     @Test
     void should_throw_when_a_null_reference_is_provided_as_the_ok_consumer() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> result.ifOk(null));
+                .isThrownBy(() -> result.ifOk(null))
+                .withNoCause()
+                .withMessage("The value consumer cannot be null");
     }
 
     @Test

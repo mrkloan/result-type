@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.util.Objects.requireNonNull;
+
 class Ok<T> implements Result<T> {
 
     private final T value;
@@ -21,7 +23,7 @@ class Ok<T> implements Result<T> {
 
     @Override
     public void ifOk(final Consumer<T> consumer) {
-        Objects.requireNonNull(consumer);
+        requireNonNull(consumer, "The value consumer cannot be null");
         consumer.accept(value);
     }
 
@@ -37,13 +39,13 @@ class Ok<T> implements Result<T> {
 
     @Override
     public <U> Result<U> map(final Function<? super T, ? extends U> mapper) {
-        Objects.requireNonNull(mapper);
+        requireNonNull(mapper);
         return new Ok<>(mapper.apply(value));
     }
 
     @Override
     public <U> Result<U> flatMap(final Function<? super T, Result<U>> mapper) {
-        Objects.requireNonNull(mapper);
+        requireNonNull(mapper);
         return mapper.apply(value);
     }
 
