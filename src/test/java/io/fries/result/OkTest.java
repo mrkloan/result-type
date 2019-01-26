@@ -73,12 +73,12 @@ class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_not_call_the_fallback_supplier_and_get_the_same_result() {
-        final Supplier<Result<Object>> supplier = mock(Supplier.class);
+    void should_not_call_the_fallback_method_and_get_the_same_result() {
+        final Function<Throwable, Result<Object>> fallbackMethod = mock(Function.class);
 
-        final Result<Object> fallbackResult = result.switchIfError(supplier);
+        final Result<Object> fallbackResult = result.switchIfError(fallbackMethod);
 
-        verify(supplier, never()).get();
+        verify(fallbackMethod, never()).apply(any());
         assertThat(fallbackResult).isEqualTo(result);
     }
 

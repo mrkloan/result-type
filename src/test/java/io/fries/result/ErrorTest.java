@@ -71,23 +71,23 @@ class ErrorTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_return_the_result_of_the_fallback_supplier() {
-        final Supplier<Result<Object>> supplier = mock(Supplier.class);
+    void should_return_the_result_of_the_fallback_method() {
+        final Function<Throwable, Result<Object>> fallbackMethod = mock(Function.class);
         final Result<Object> suppliedResult = mock(Result.class);
-        given(supplier.get()).willReturn(suppliedResult);
+        given(fallbackMethod.apply(error)).willReturn(suppliedResult);
 
-        final Result<Object> fallbackResult = result.switchIfError(supplier);
+        final Result<Object> fallbackResult = result.switchIfError(fallbackMethod);
 
-        verify(supplier).get();
+        verify(fallbackMethod).apply(error);
         assertThat(fallbackResult).isEqualTo(suppliedResult);
     }
 
     @Test
-    void should_throw_when_the_fallback_supplier_is_null() {
+    void should_throw_when_the_fallback_method_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> result.switchIfError(null))
                 .withNoCause()
-                .withMessage("The fallback supplier cannot be null");
+                .withMessage("The fallback method cannot be null");
     }
 
     @Test

@@ -38,7 +38,7 @@ class Ok<T> implements Result<T> {
     }
 
     @Override
-    public Result<T> switchIfError(final Supplier<Result<T>> fallbackSupplier) {
+    public Result<T> switchIfError(final Function<Throwable, Result<T>> fallbackMethod) {
         return new Ok<>(value);
     }
 

@@ -42,9 +42,9 @@ class Error<T> implements Result<T> {
     }
 
     @Override
-    public Result<T> switchIfError(final Supplier<Result<T>> fallbackSupplier) {
-        requireNonNull(fallbackSupplier, "The fallback supplier cannot be null");
-        return fallbackSupplier.get();
+    public Result<T> switchIfError(final Function<Throwable, Result<T>> fallbackMethod) {
+        requireNonNull(fallbackMethod, "The fallback method cannot be null");
+        return fallbackMethod.apply(throwable);
     }
 
     @Override
