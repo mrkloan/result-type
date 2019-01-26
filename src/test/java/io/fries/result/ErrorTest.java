@@ -109,7 +109,9 @@ class ErrorTest {
     @Test
     void should_throw_when_the_provided_error_mapper_reference_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> result.mapError(null));
+                .isThrownBy(() -> result.mapError(null))
+                .withNoCause()
+                .withMessage("The error mapper cannot be null");
     }
 
     @Test

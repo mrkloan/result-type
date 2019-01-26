@@ -49,7 +49,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public Result<T> mapError(final Function<Throwable, ? extends Throwable> mapper) {
-        requireNonNull(mapper);
+        requireNonNull(mapper, "The error mapper cannot be null");
         return new Error<>(mapper.apply(throwable));
     }
 
