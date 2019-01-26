@@ -23,7 +23,7 @@ Result.error("Error message")
 
 Unwrap the value:
 ```java
-final Result<String, ?> result = Result.ok("Value");
+final Result<String> result = Result.ok("Value");
 
 if(result.isOk()) {
     final String value = result.get();
@@ -33,23 +33,43 @@ if(result.isOk()) {
 
 Unwrap the error:
 ```java
-final Result<?, String> result = Result.error("Error message");
+final Result<?> result = Result.error(new CustomException("Error message"));
 
 if(result.isError()) {
-    final String error = result.getError();
+    final Throwable error = result.getError();
     /* Do something with the error */
 }
 ```
 
-Wrap safely by supplying a fallback error:  
+Wrap a value safely by supplying a fallback error:  
 ```java
 Result.ofNullable(someVariable, NullPointerException::new);
 ```
 
 Unwrap safely by supplying a fallback value:
 ```java
-final Result<Integer, String> result = Result.error("Error message");
+final Result<Integer> result = Result.error(new CustomException("Error message"));
 final Integer value = result.getOrElse(() -> 7);
+```
+
+Wrap a legacy method that may throw an exception to gracefully integrate it to your railway flow:
+```java
+Result.of(() -> legacyService.findUser(id))
+      .map(user -> legacyService.transform(user))
+      .ifOk(user -> { /* Do something with the value */ })
+      .ifError(error -> { /* Do something with the error */ });
+```
+
+Try to recover from an error using a fallback method:
+```java
+Result.of(() -> legacyService.findUser(id))
+      .switchIfError(error -> fallbackMethod(id))
+      .map(user -> legacyService.transform(user))
+      // ...
+
+private Result<User> fallbackMethod(final Id id) {
+    /* Try to get another value instead of the one that failed */
+}
 ```
 
 ## Installation
