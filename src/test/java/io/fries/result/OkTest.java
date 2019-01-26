@@ -73,7 +73,7 @@ class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_not_call_the_fallback_supplier() {
+    void should_not_call_the_fallback_supplier_and_get_the_same_result() {
         final Supplier<Result<Object>> supplier = (Supplier<Result<Object>>) mock(Supplier.class);
 
         final Result<Object> fallbackResult = result.switchIfError(supplier);

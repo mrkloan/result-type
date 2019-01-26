@@ -43,7 +43,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public Result<T> switchIfError(final Supplier<Result<T>> fallbackSupplier) {
-        throw new UnsupportedOperationException();
+        return fallbackSupplier.get();
     }
 
     @Override

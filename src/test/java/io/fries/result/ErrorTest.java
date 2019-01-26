@@ -71,6 +71,19 @@ class ErrorTest {
 
     @Test
     @SuppressWarnings("unchecked")
+    void should_return_the_result_of_the_fallback_supplier() {
+        final Supplier<Result<Object>> supplier = mock(Supplier.class);
+        final Result<Object> suppliedResult = mock(Result.class);
+        given(supplier.get()).willReturn(suppliedResult);
+
+        final Result<Object> fallbackResult = result.switchIfError(supplier);
+
+        verify(supplier).get();
+        assertThat(fallbackResult).isEqualTo(suppliedResult);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     void should_get_the_same_result_when_trying_to_map_an_error_result() {
         final Function<Object, Object> mapper = (Function<Object, Object>) mock(Function.class);
 
