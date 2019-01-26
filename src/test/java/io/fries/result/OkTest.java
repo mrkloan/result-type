@@ -152,4 +152,30 @@ class OkTest {
                 .withNoCause()
                 .withMessage("Result contains a value: " + valueString);
     }
+
+    @Test
+    void should_be_equal() {
+        final Result<Object> otherResult = new Ok<>(value);
+
+        assertThat(result).isEqualTo(otherResult);
+        assertThat(result.hashCode()).isEqualTo(otherResult.hashCode());
+    }
+
+    @Test
+    void should_not_be_equal() {
+        final Result<Object> otherResult = new Ok<>(mock(Object.class));
+
+        assertThat(result).isNotEqualTo(otherResult);
+        assertThat(result.hashCode()).isNotEqualTo(otherResult.hashCode());
+    }
+
+    @Test
+    void should_be_formatted_as_a_string() {
+        final String valueString = "Value";
+        given(value.toString()).willReturn(valueString);
+
+        final String resultString = result.toString();
+
+        assertThat(resultString).isEqualTo("Ok{value=Value}");
+    }
 }

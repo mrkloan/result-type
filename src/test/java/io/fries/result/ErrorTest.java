@@ -144,4 +144,30 @@ class ErrorTest {
 
         assertThat(error).isEqualTo(error);
     }
+
+    @Test
+    void should_be_equal() {
+        final Result<Object> otherResult = new Error<>(error);
+
+        assertThat(result).isEqualTo(otherResult);
+        assertThat(result.hashCode()).isEqualTo(otherResult.hashCode());
+    }
+
+    @Test
+    void should_not_be_equal() {
+        final Result<Object> otherResult = new Error<>(mock(Throwable.class));
+
+        assertThat(result).isNotEqualTo(otherResult);
+        assertThat(result.hashCode()).isNotEqualTo(otherResult.hashCode());
+    }
+
+    @Test
+    void should_be_formatted_as_a_string() {
+        final String errorString = "Error";
+        given(error.toString()).willReturn(errorString);
+
+        final String resultString = result.toString();
+
+        assertThat(resultString).isEqualTo("Error{throwable=Error}");
+    }
 }
