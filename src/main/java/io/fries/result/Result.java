@@ -20,7 +20,7 @@ public interface Result<T> {
     }
 
     static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {
-        requireNonNull(errorSupplier);
+        requireNonNull(errorSupplier, "The errorSupplier cannot be null");
 
         return Objects.nonNull(value)
                 ? ok(value)

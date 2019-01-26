@@ -70,6 +70,8 @@ class ResultTest {
     @Test
     void should_throw_when_providing_a_null_reference_as_the_error_supplier() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> Result.ofNullable(value, null));
+                .isThrownBy(() -> Result.ofNullable(value, null))
+                .withNoCause()
+                .withMessage("The errorSupplier cannot be null");
     }
 }
