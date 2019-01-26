@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ResultTest {
@@ -83,21 +83,46 @@ class ResultTest {
     }
 
     @Test
+    void should_create_an_ok_result_when_the_nullable_value_is_not_null() {
+        final Result<Object> result = Result.ofNullable(value);
+
+        assertThat(result.isOk()).isTrue();
+    }
+
+    @Test
+    void should_create_an_error_result_containing_a_null_pointer_exception_when_the_nullable_value_is_null() {
+        final Result<Object> result = Result.ofNullable(null);
+
+        final Throwable error = result.getError();
+
+        assertThat(error)
+                .isInstanceOf(NullPointerException.class)
+                .hasNoCause()
+                .hasMessage(null);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     void should_create_an_ok_result_when_the_provided_value_is_not_null() {
-        final Supplier<Throwable> errorSupplier = NullPointerException::new;
+        final Supplier<Throwable> errorSupplier = mock(Supplier.class);
 
         final Result<Object> result = Result.ofNullable(value, errorSupplier);
 
+        verify(errorSupplier, never()).get();
         assertThat(result).isEqualTo(Result.ok(value));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void should_create_an_error_result_when_the_provided_value_is_null() {
-        final Supplier<NullPointerException> errorSupplier = NullPointerException::new;
+        final Supplier<Throwable> errorSupplier = mock(Supplier.class);
+        final RuntimeException error = mock(RuntimeException.class);
+        given(errorSupplier.get()).willReturn(error);
 
         final Result<Object> result = Result.ofNullable(null, errorSupplier);
 
-        assertThat(result.isError()).isTrue();
+        verify(errorSupplier).get();
+        assertThat(result).isEqualTo(Result.error(error));
     }
 
     @Test

@@ -29,6 +29,10 @@ public interface Result<T> {
         }
     }
 
+    static <T> Result<T> ofNullable(final T value) {
+        return ofNullable(value, NullPointerException::new);
+    }
+
     static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {
         requireNonNull(errorSupplier, "The error supplier cannot be null");
 

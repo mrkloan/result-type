@@ -43,7 +43,11 @@ if(result.isError()) {
 
 Wrap a value safely by supplying a fallback error:  
 ```java
-Result.ofNullable(someVariable, NullPointerException::new);
+// If `someVariable` is null, the default error is a NullPointerException.
+Result.ofNullable(someVariable);
+
+// Use a custom error supplier.
+Result.ofNullable(someVariable, IllegalStateException::new);
 ```
 
 Unwrap safely by supplying a fallback value:
