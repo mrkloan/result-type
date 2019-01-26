@@ -87,7 +87,9 @@ class OkTest {
     @Test
     void should_throw_when_the_provided_mapper_reference_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> result.map(null));
+                .isThrownBy(() -> result.map(null))
+                .withNoCause()
+                .withMessage("The value mapper cannot be null");
     }
 
     @Test
