@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.util.Objects.requireNonNull;
+
 class Error<T> implements Result<T> {
 
     private final Throwable throwable;
@@ -31,7 +33,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public void ifError(final Consumer<Throwable> consumer) {
-        Objects.requireNonNull(consumer);
+        requireNonNull(consumer, "The error consumer cannot be null");
         consumer.accept(throwable);
     }
 
@@ -47,7 +49,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public Result<T> mapError(final Function<Throwable, ? extends Throwable> mapper) {
-        Objects.requireNonNull(mapper);
+        requireNonNull(mapper);
         return new Error<>(mapper.apply(throwable));
     }
 
@@ -58,7 +60,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public T getOrElse(final Supplier<T> supplier) {
-        Objects.requireNonNull(supplier);
+        requireNonNull(supplier);
         return supplier.get();
     }
 

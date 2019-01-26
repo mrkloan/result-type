@@ -66,7 +66,9 @@ class ErrorTest {
     @Test
     void should_throw_when_a_null_reference_is_provided_as_the_error_consumer() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> result.ifError(null));
+                .isThrownBy(() -> result.ifError(null))
+                .withNoCause()
+                .withMessage("The error consumer cannot be null");
     }
 
     @Test
