@@ -108,7 +108,9 @@ class OkTest {
     @Test
     void should_throw_when_the_provided_flat_mapper_reference_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> result.flatMap(null));
+                .isThrownBy(() -> result.flatMap(null))
+                .withNoCause()
+                .withMessage("The value flat-mapper cannot be null");
     }
 
     @Test

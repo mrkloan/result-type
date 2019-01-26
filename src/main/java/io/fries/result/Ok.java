@@ -45,7 +45,7 @@ class Ok<T> implements Result<T> {
 
     @Override
     public <U> Result<U> flatMap(final Function<? super T, Result<U>> mapper) {
-        requireNonNull(mapper);
+        requireNonNull(mapper, "The value flat-mapper cannot be null");
         return mapper.apply(value);
     }
 
