@@ -15,7 +15,7 @@ public interface Result<T> {
     }
 
     static <T, E extends Throwable> Result<T> error(final E throwable) {
-        requireNonNull(throwable);
+        requireNonNull(throwable, "The error of a Result cannot be null");
         return new Error<>(throwable);
     }
 

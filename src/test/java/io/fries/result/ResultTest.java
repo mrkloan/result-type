@@ -44,7 +44,9 @@ class ResultTest {
     @Test
     void should_throw_when_providing_a_null_reference_to_an_error_result() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> Result.error(null));
+                .isThrownBy(() -> Result.error(null))
+                .withNoCause()
+                .withMessage("The error of a Result cannot be null");
     }
 
     @Test
