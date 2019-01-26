@@ -1,6 +1,5 @@
 package io.fries.result;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -14,6 +13,11 @@ class Error<T> implements Result<T> {
 
     Error(final Throwable throwable) {
         this.throwable = throwable;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E extends Throwable> T propagate(final Throwable throwable) throws E {
+        throw (E) throwable;
     }
 
     @Override
@@ -55,7 +59,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public T get() {
-        throw new NoSuchElementException("Result contains an error: " + throwable.getMessage());
+        return propagate(throwable);
     }
 
     @Override

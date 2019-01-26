@@ -6,13 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -115,14 +113,10 @@ class ErrorTest {
     }
 
     @Test
-    void should_throw_when_trying_to_unwrap_the_value() {
-        final String errorMessage = "Error";
-        given(error.getMessage()).willReturn(errorMessage);
+    void should_throw_the_error_when_trying_to_unwrap_the_value() {
+        final Throwable throwable = catchThrowable(() -> result.get());
 
-        assertThatExceptionOfType(NoSuchElementException.class)
-                .isThrownBy(result::get)
-                .withNoCause()
-                .withMessage("Result contains an error: " + errorMessage);
+        assertThat(throwable).isEqualTo(error);
     }
 
     @Test
