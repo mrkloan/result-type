@@ -46,7 +46,7 @@ class OkTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_consume_the_value_of_an_ok_result() {
-        final Consumer<Object> consumer = (Consumer<Object>) mock(Consumer.class);
+        final Consumer<Object> consumer = mock(Consumer.class);
 
         result.ifOk(consumer);
 
@@ -64,7 +64,7 @@ class OkTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_not_call_the_error_consumer() {
-        final Consumer<Throwable> consumer = (Consumer<Throwable>) mock(Consumer.class);
+        final Consumer<Throwable> consumer = mock(Consumer.class);
 
         result.ifError(consumer);
 
@@ -74,7 +74,7 @@ class OkTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_not_call_the_fallback_supplier_and_get_the_same_result() {
-        final Supplier<Result<Object>> supplier = (Supplier<Result<Object>>) mock(Supplier.class);
+        final Supplier<Result<Object>> supplier = mock(Supplier.class);
 
         final Result<Object> fallbackResult = result.switchIfError(supplier);
 
@@ -86,7 +86,7 @@ class OkTest {
     @SuppressWarnings("unchecked")
     void should_map_the_wrapped_value_to_another_type() {
         final Object mappedValue = mock(Object.class);
-        final Function<Object, Object> mapper = (Function<Object, Object>) mock(Function.class);
+        final Function<Object, Object> mapper = mock(Function.class);
         given(mapper.apply(value)).willReturn(mappedValue);
 
         final Result<Object> mappedResult = result.map(mapper);
@@ -107,7 +107,7 @@ class OkTest {
     @SuppressWarnings("unchecked")
     void should_flat_map_the_wrapped_result() {
         final Object mappedValue = mock(Object.class);
-        final Function<Object, Result<Object>> mapper = (Function<Object, Result<Object>>) mock(Function.class);
+        final Function<Object, Result<Object>> mapper = mock(Function.class);
         given(mapper.apply(value)).willReturn(new Ok<>(mappedValue));
 
         final Result<Object> mappedResult = result.flatMap(mapper);
@@ -127,7 +127,7 @@ class OkTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_get_the_same_result_when_trying_to_map_an_error_result() {
-        final Function<Throwable, Throwable> mapper = (Function<Throwable, Throwable>) mock(Function.class);
+        final Function<Throwable, Throwable> mapper = mock(Function.class);
 
         final Result<Object> mappedResult = result.mapError(mapper);
 
@@ -145,7 +145,7 @@ class OkTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
-        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
+        final Supplier<Object> supplier = mock(Supplier.class);
 
         final Object unwrappedValue = result.getOrElse(supplier);
 

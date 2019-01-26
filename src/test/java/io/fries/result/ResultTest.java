@@ -54,7 +54,7 @@ class ResultTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_create_an_ok_result_wrapping_the_supplied_value() {
-        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
+        final Supplier<Object> supplier = mock(Supplier.class);
         given(supplier.get()).willReturn(value);
 
         final Result<Object> result = Result.of(supplier);
@@ -65,7 +65,7 @@ class ResultTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_create_an_error_result_when_the_supplier_throws_an_exception() {
-        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
+        final Supplier<Object> supplier = mock(Supplier.class);
         final Throwable error = mock(RuntimeException.class);
         given(supplier.get()).willThrow(error);
 

@@ -44,7 +44,7 @@ class ErrorTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_not_call_the_ok_consumer() {
-        final Consumer<Object> consumer = (Consumer<Object>) mock(Consumer.class);
+        final Consumer<Object> consumer = mock(Consumer.class);
 
         result.ifOk(consumer);
 
@@ -54,7 +54,7 @@ class ErrorTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_consume_the_value_of_an_error_result() {
-        final Consumer<Throwable> consumer = (Consumer<Throwable>) mock(Consumer.class);
+        final Consumer<Throwable> consumer = mock(Consumer.class);
 
         result.ifError(consumer);
 
@@ -93,7 +93,7 @@ class ErrorTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_get_the_same_result_when_trying_to_map_an_error_result() {
-        final Function<Object, Object> mapper = (Function<Object, Object>) mock(Function.class);
+        final Function<Object, Object> mapper = mock(Function.class);
 
         final Result<Object> mappedResult = result.map(mapper);
 
@@ -104,7 +104,7 @@ class ErrorTest {
     @Test
     @SuppressWarnings("unchecked")
     void should_get_the_same_result_when_trying_to_flat_map_an_error_result() {
-        final Function<Object, Result<Object>> mapper = (Function<Object, Result<Object>>) mock(Function.class);
+        final Function<Object, Result<Object>> mapper = mock(Function.class);
 
         final Result<Object> mappedResult = result.flatMap(mapper);
 
@@ -116,7 +116,7 @@ class ErrorTest {
     @SuppressWarnings("unchecked")
     void should_map_the_wrapped_error_to_another_type() {
         final Throwable mappedError = mock(Throwable.class);
-        final Function<Throwable, Throwable> mapper = (Function<Throwable, Throwable>) mock(Function.class);
+        final Function<Throwable, Throwable> mapper = mock(Function.class);
         given(mapper.apply(error)).willReturn(mappedError);
 
         final Result<Object> mappedResult = result.mapError(mapper);
@@ -144,7 +144,7 @@ class ErrorTest {
     @SuppressWarnings("unchecked")
     void should_get_the_supplied_fallback_value_when_trying_to_unwrap_the_result() {
         final Object fallbackValue = mock(Object.class);
-        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
+        final Supplier<Object> supplier = mock(Supplier.class);
         given(supplier.get()).willReturn(fallbackValue);
 
         final Object unwrappedValue = result.getOrElse(supplier);
