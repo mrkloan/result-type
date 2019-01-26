@@ -83,6 +83,14 @@ class ErrorTest {
     }
 
     @Test
+    void should_throw_when_the_fallback_supplier_is_null() {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> result.switchIfError(null))
+                .withNoCause()
+                .withMessage("The fallback supplier cannot be null");
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     void should_get_the_same_result_when_trying_to_map_an_error_result() {
         final Function<Object, Object> mapper = (Function<Object, Object>) mock(Function.class);
