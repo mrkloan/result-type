@@ -9,6 +9,8 @@ import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class ResultTest {
@@ -47,6 +49,17 @@ class ResultTest {
                 .isThrownBy(() -> Result.error(null))
                 .withNoCause()
                 .withMessage("The error of a Result cannot be null");
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void should_create_an_ok_result_wrapping_the_supplied_value() {
+        final Supplier<Object> supplier = (Supplier<Object>) mock(Supplier.class);
+        given(supplier.get()).willReturn(value);
+
+        final Result<Object> result = Result.of(supplier);
+
+        assertThat(result).isEqualTo(Result.ok(value));
     }
 
     @Test

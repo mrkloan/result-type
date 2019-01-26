@@ -1,10 +1,10 @@
 package io.fries.result;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 public interface Result<T> {
@@ -19,10 +19,14 @@ public interface Result<T> {
         return new Error<>(throwable);
     }
 
+    static <T> Result<T> of(final Supplier<T> supplier) {
+        return ok(supplier.get());
+    }
+
     static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {
         requireNonNull(errorSupplier, "The errorSupplier cannot be null");
 
-        return Objects.nonNull(value)
+        return nonNull(value)
                 ? ok(value)
                 : error(errorSupplier.get());
     }
