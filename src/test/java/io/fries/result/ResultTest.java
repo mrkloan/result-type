@@ -75,6 +75,14 @@ class ResultTest {
     }
 
     @Test
+    void should_throw_when_providing_a_null_supplier_reference() {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Result.of(null))
+                .withNoCause()
+                .withMessage("The value supplier cannot be null");
+    }
+
+    @Test
     void should_create_an_ok_result_when_the_provided_value_is_not_null() {
         final Supplier<Throwable> errorSupplier = NullPointerException::new;
 
@@ -97,6 +105,6 @@ class ResultTest {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> Result.ofNullable(value, null))
                 .withNoCause()
-                .withMessage("The errorSupplier cannot be null");
+                .withMessage("The error supplier cannot be null");
     }
 }

@@ -20,6 +20,8 @@ public interface Result<T> {
     }
 
     static <T> Result<T> of(final Supplier<T> supplier) {
+        requireNonNull(supplier, "The value supplier cannot be null");
+
         try {
             return ok(supplier.get());
         } catch (final Exception error) {
@@ -28,7 +30,7 @@ public interface Result<T> {
     }
 
     static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {
-        requireNonNull(errorSupplier, "The errorSupplier cannot be null");
+        requireNonNull(errorSupplier, "The error supplier cannot be null");
 
         return nonNull(value)
                 ? ok(value)
