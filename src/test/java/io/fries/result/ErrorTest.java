@@ -116,10 +116,13 @@ class ErrorTest {
 
     @Test
     void should_throw_when_trying_to_unwrap_the_value() {
+        final String errorMessage = "Error";
+        given(error.getMessage()).willReturn(errorMessage);
+
         assertThatExceptionOfType(NoSuchElementException.class)
                 .isThrownBy(result::get)
                 .withNoCause()
-                .withMessage("Result is an error");
+                .withMessage("Result contains an error: " + errorMessage);
     }
 
     @Test

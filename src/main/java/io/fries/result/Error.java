@@ -55,7 +55,7 @@ class Error<T> implements Result<T> {
 
     @Override
     public T get() {
-        throw new NoSuchElementException("Result is an error");
+        throw new NoSuchElementException("Result contains an error: " + throwable.getMessage());
     }
 
     @Override
