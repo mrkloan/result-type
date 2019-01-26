@@ -144,9 +144,12 @@ class OkTest {
 
     @Test
     void should_throw_when_trying_to_unwrap_the_error() {
+        final String valueString = "Value";
+        given(value.toString()).willReturn(valueString);
+
         assertThatExceptionOfType(NoSuchElementException.class)
                 .isThrownBy(result::getError)
                 .withNoCause()
-                .withMessage("Result is ok");
+                .withMessage("Result contains a value: " + valueString);
     }
 }

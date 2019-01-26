@@ -66,7 +66,7 @@ class Ok<T> implements Result<T> {
 
     @Override
     public Throwable getError() {
-        throw new NoSuchElementException("Result is ok");
+        throw new NoSuchElementException("Result contains a value: " + value.toString());
     }
 
     @Override
