@@ -50,6 +50,12 @@ Result.ofNullable(someVariable);
 Result.ofNullable(someVariable, IllegalStateException::new);
 ```
 
+Or migrate an `Optional<T>` type to a `Result<T>`:
+```java
+final Optional<String> optional = Optional.of("Value");
+final Result<String> result = Result.of(optional);
+```
+
 Unwrap safely by supplying a fallback value:
 ```java
 final Result<Integer> result = Result.error(new IllegalStateException("Error message"));
