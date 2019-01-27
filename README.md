@@ -1,7 +1,5 @@
-# result-type
+# result-type [![Build Status](https://travis-ci.org/MrKloan/result-type.svg?branch=master)](https://travis-ci.org/MrKloan/result-type) [![](https://jitpack.io/v/MrKloan/result-type.svg)](https://jitpack.io/#MrKloan/result-type)
 > A Result type for the Java programming language.
-
-[![](https://jitpack.io/v/MrKloan/result-type.svg)](https://jitpack.io/#MrKloan/result-type)
 
 ## Usage
 
