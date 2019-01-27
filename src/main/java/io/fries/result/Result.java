@@ -39,7 +39,7 @@ public interface Result<T> {
     }
 
     static <T> Result<T> ofNullable(final T value) {
-        return ofNullable(value, NullPointerException::new);
+        return ofNullable(value, () -> new NullPointerException("The result was initialized with a null value"));
     }
 
     static <T> Result<T> ofNullable(final T value, final Supplier<? extends Throwable> errorSupplier) {

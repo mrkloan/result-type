@@ -100,7 +100,7 @@ class ResultTest {
         assertThat(error)
                 .isInstanceOf(NullPointerException.class)
                 .hasNoCause()
-                .hasMessage(null);
+                .hasMessage("The result was initialized with a null value");
     }
 
     @Test
