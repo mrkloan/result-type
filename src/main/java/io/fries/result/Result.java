@@ -33,6 +33,8 @@ public interface Result<T> {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     static <T> Result<T> of(final Optional<T> optional) {
+        requireNonNull(optional, "The optional value cannot be null");
+
         return optional
                 .map(Result::ok)
                 .orElseGet(() -> error(new NoSuchElementException("No value present when unwrapping the optional")));

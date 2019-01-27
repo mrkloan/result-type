@@ -126,6 +126,15 @@ class ResultTest {
     }
 
     @Test
+    @SuppressWarnings("OptionalAssignedToNull")
+    void should_throw_when_the_optional_reference_is_null() {
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Result.of((Optional<Object>) null))
+                .withNoCause()
+                .withMessage("The optional value cannot be null");
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     void should_create_an_ok_result_when_the_provided_value_is_not_null() {
         final Supplier<Throwable> errorSupplier = mock(Supplier.class);
