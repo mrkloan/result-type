@@ -84,6 +84,7 @@ private Result<User> fallbackSearch(final Id id) {
 ```
 
 ## Installation
+> For Java 8 compatibility, use the [latest supported version](https://github.com/MrKloan/result-type/blob/1.1.0/README.md#Installation).
 
 Gradle:
 ```groovy
@@ -95,7 +96,7 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.MrKloan:result-type:1.1.0'
+	implementation 'com.github.MrKloan:result-type:2.0.0'
 }
 ```
 
@@ -112,7 +113,7 @@ Maven:
 	<dependency>
 		<groupId>com.github.MrKloan</groupId>
 		<artifactId>result-type</artifactId>
-		<version>1.1.0</version>
+		<version>2.0.0</version>
 	</dependency>
 </dependencies>
 ```

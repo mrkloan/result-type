@@ -1,11 +1,11 @@
 group 'io.fries'
-version '1.0-SNAPSHOT'
+version '2.0.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11.0
+targetCompatibility = 11.0
 
 repositories {
     mavenCentral()
