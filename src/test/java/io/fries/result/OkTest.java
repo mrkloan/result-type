@@ -1,10 +1,10 @@
 package io.fries.result;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -16,28 +16,28 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OkTest {
+@ExtendWith(MockitoExtension.class)
+class OkTest {
 
     @Mock
     private Throwable value;
 
     private Result<Object> result;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.result = new Ok<>(value);
     }
 
     @Test
-    public void should_be_true_when_the_result_is_an_ok_result() {
+    void should_be_true_when_the_result_is_an_ok_result() {
         final boolean isOk = result.isOk();
 
         assertThat(isOk).isTrue();
     }
 
     @Test
-    public void should_be_false_when_the_result_is_an_ok_result() {
+    void should_be_false_when_the_result_is_an_ok_result() {
         final boolean isError = result.isError();
 
         assertThat(isError).isFalse();
@@ -45,7 +45,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_consume_the_value_of_an_ok_result() {
+    void should_consume_the_value_of_an_ok_result() {
         final Consumer<Object> consumer = mock(Consumer.class);
 
         result.ifOk(consumer);
@@ -54,7 +54,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_throw_when_a_null_reference_is_provided_as_the_ok_consumer() {
+    void should_throw_when_a_null_reference_is_provided_as_the_ok_consumer() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> result.ifOk(null))
                 .withNoCause()
@@ -63,7 +63,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_not_call_the_error_consumer() {
+    void should_not_call_the_error_consumer() {
         final Consumer<Throwable> consumer = mock(Consumer.class);
 
         result.ifError(consumer);
@@ -73,7 +73,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_not_call_the_fallback_method_and_get_the_same_result() {
+    void should_not_call_the_fallback_method_and_get_the_same_result() {
         final Function<Throwable, Result<Object>> fallbackMethod = mock(Function.class);
 
         final Result<Object> fallbackResult = result.switchIfError(fallbackMethod);
@@ -84,7 +84,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_map_the_wrapped_value_to_another_type() {
+    void should_map_the_wrapped_value_to_another_type() {
         final Object mappedValue = mock(Object.class);
         final Function<Object, Object> mapper = mock(Function.class);
         given(mapper.apply(value)).willReturn(mappedValue);
@@ -96,7 +96,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_throw_when_the_provided_mapper_reference_is_null() {
+    void should_throw_when_the_provided_mapper_reference_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> result.map(null))
                 .withNoCause()
@@ -105,7 +105,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_flat_map_the_wrapped_result() {
+    void should_flat_map_the_wrapped_result() {
         final Object mappedValue = mock(Object.class);
         final Function<Object, Result<Object>> mapper = mock(Function.class);
         given(mapper.apply(value)).willReturn(new Ok<>(mappedValue));
@@ -117,7 +117,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_throw_when_the_provided_flat_mapper_reference_is_null() {
+    void should_throw_when_the_provided_flat_mapper_reference_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> result.flatMap(null))
                 .withNoCause()
@@ -126,7 +126,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_get_the_same_result_when_trying_to_map_an_error_result() {
+    void should_get_the_same_result_when_trying_to_map_an_error_result() {
         final Function<Throwable, Throwable> mapper = mock(Function.class);
 
         final Result<Object> mappedResult = result.mapError(mapper);
@@ -136,7 +136,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_get_the_wrapped_value() {
+    void should_get_the_wrapped_value() {
         final Object unwrappedValue = result.get();
 
         assertThat(unwrappedValue).isEqualTo(value);
@@ -144,7 +144,7 @@ public class OkTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
+    void should_get_the_wrapped_value_and_not_the_supplied_fallback() {
         final Supplier<Object> supplier = mock(Supplier.class);
 
         final Object unwrappedValue = result.getOrElse(supplier);
@@ -154,7 +154,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_throw_when_trying_to_unwrap_the_error() {
+    void should_throw_when_trying_to_unwrap_the_error() {
         final String valueString = "Value";
         given(value.toString()).willReturn(valueString);
 
@@ -165,7 +165,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_be_equal() {
+    void should_be_equal() {
         final Result<Object> otherResult = new Ok<>(value);
 
         assertThat(result).isEqualTo(otherResult);
@@ -173,7 +173,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_not_be_equal() {
+    void should_not_be_equal() {
         final Result<Object> otherResult = new Ok<>(mock(Object.class));
 
         assertThat(result).isNotEqualTo(otherResult);
@@ -181,7 +181,7 @@ public class OkTest {
     }
 
     @Test
-    public void should_be_formatted_as_a_string() {
+    void should_be_formatted_as_a_string() {
         final String valueString = "Value";
         given(value.toString()).willReturn(valueString);
 
