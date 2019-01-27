@@ -1,4 +1,4 @@
-# result-type [![Build Status](https://travis-ci.org/MrKloan/result-type.svg?branch=master)](https://travis-ci.org/MrKloan/result-type) [![](https://jitpack.io/v/MrKloan/result-type.svg)](https://jitpack.io/#MrKloan/result-type)
+# result-type [![Build Status](https://travis-ci.org/MrKloan/result-type.svg?branch=master)](https://travis-ci.org/MrKloan/result-type) [![codecov](https://codecov.io/gh/MrKloan/result-type/branch/master/graph/badge.svg)](https://codecov.io/gh/MrKloan/result-type) [![](https://jitpack.io/v/MrKloan/result-type.svg)](https://jitpack.io/#MrKloan/result-type)
 > A Result type for the Java programming language.
 
 ## Usage

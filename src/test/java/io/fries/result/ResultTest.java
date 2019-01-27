@@ -1,9 +1,9 @@
 package io.fries.result;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class ResultTest {
+@RunWith(MockitoJUnitRunner.class)
+public class ResultTest {
 
     @Mock
     private Object value;
@@ -24,14 +24,14 @@ class ResultTest {
     private Throwable error;
 
     @Test
-    void should_create_an_ok_result_wrapping_the_provided_value() {
+    public void should_create_an_ok_result_wrapping_the_provided_value() {
         final Result<Object> result = Result.ok(value);
 
         assertThat(result).isEqualTo(Result.ok(value));
     }
 
     @Test
-    void should_throw_when_providing_a_null_reference_to_an_ok_result() {
+    public void should_throw_when_providing_a_null_reference_to_an_ok_result() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> Result.ok(null))
                 .withNoCause()
@@ -39,14 +39,14 @@ class ResultTest {
     }
 
     @Test
-    void should_create_an_error_result_wrapping_the_provided_error() {
+    public void should_create_an_error_result_wrapping_the_provided_error() {
         final Result<Object> result = Result.error(error);
 
         assertThat(result).isEqualTo(Result.error(error));
     }
 
     @Test
-    void should_throw_when_providing_a_null_reference_to_an_error_result() {
+    public void should_throw_when_providing_a_null_reference_to_an_error_result() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> Result.error(null))
                 .withNoCause()
@@ -55,7 +55,7 @@ class ResultTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_create_an_ok_result_wrapping_the_supplied_value() {
+    public void should_create_an_ok_result_wrapping_the_supplied_value() {
         final Supplier<Object> supplier = mock(Supplier.class);
         given(supplier.get()).willReturn(value);
 
@@ -66,7 +66,7 @@ class ResultTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_create_an_error_result_when_the_supplier_throws_an_exception() {
+    public void should_create_an_error_result_when_the_supplier_throws_an_exception() {
         final Supplier<Object> supplier = mock(Supplier.class);
         final Throwable error = mock(RuntimeException.class);
         given(supplier.get()).willThrow(error);
@@ -77,7 +77,7 @@ class ResultTest {
     }
 
     @Test
-    void should_throw_when_providing_a_null_supplier_reference() {
+    public void should_throw_when_providing_a_null_supplier_reference() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> Result.of((Supplier<Object>) null))
                 .withNoCause()
@@ -85,14 +85,14 @@ class ResultTest {
     }
 
     @Test
-    void should_create_an_ok_result_when_the_nullable_value_is_not_null() {
+    public void should_create_an_ok_result_when_the_nullable_value_is_not_null() {
         final Result<Object> result = Result.ofNullable(value);
 
         assertThat(result.isOk()).isTrue();
     }
 
     @Test
-    void should_create_an_error_result_containing_a_null_pointer_exception_when_the_nullable_value_is_null() {
+    public void should_create_an_error_result_containing_a_null_pointer_exception_when_the_nullable_value_is_null() {
         final Result<Object> result = Result.ofNullable(null);
 
         final Throwable error = result.getError();
@@ -104,7 +104,7 @@ class ResultTest {
     }
 
     @Test
-    void should_create_an_ok_result_containing_the_unwrapped_optional_value() {
+    public void should_create_an_ok_result_containing_the_unwrapped_optional_value() {
         final Optional<Object> optional = Optional.of(value);
 
         final Result<Object> result = Result.of(optional);
@@ -113,7 +113,7 @@ class ResultTest {
     }
 
     @Test
-    void should_create_an_error_result_when_unwrapping_an_empty_optional() {
+    public void should_create_an_error_result_when_unwrapping_an_empty_optional() {
         final Optional<Object> optional = Optional.empty();
 
         final Result<Object> result = Result.of(optional);
@@ -127,7 +127,7 @@ class ResultTest {
 
     @Test
     @SuppressWarnings("OptionalAssignedToNull")
-    void should_throw_when_the_optional_reference_is_null() {
+    public void should_throw_when_the_optional_reference_is_null() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> Result.of((Optional<Object>) null))
                 .withNoCause()
@@ -136,7 +136,7 @@ class ResultTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_create_an_ok_result_when_the_provided_value_is_not_null() {
+    public void should_create_an_ok_result_when_the_provided_value_is_not_null() {
         final Supplier<Throwable> errorSupplier = mock(Supplier.class);
 
         final Result<Object> result = Result.ofNullable(value, errorSupplier);
@@ -147,7 +147,7 @@ class ResultTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void should_create_an_error_result_when_the_provided_value_is_null() {
+    public void should_create_an_error_result_when_the_provided_value_is_null() {
         final Supplier<Throwable> errorSupplier = mock(Supplier.class);
         final RuntimeException error = mock(RuntimeException.class);
         given(errorSupplier.get()).willReturn(error);
@@ -159,7 +159,7 @@ class ResultTest {
     }
 
     @Test
-    void should_throw_when_providing_a_null_reference_as_the_error_supplier() {
+    public void should_throw_when_providing_a_null_reference_as_the_error_supplier() {
         assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(() -> Result.ofNullable(value, null))
                 .withNoCause()
