@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,7 +78,7 @@ class ResultTest {
     @Test
     void should_throw_when_providing_a_null_supplier_reference() {
         assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> Result.of(null))
+                .isThrownBy(() -> Result.of((Supplier<Object>) null))
                 .withNoCause()
                 .withMessage("The value supplier cannot be null");
     }
@@ -99,6 +100,15 @@ class ResultTest {
                 .isInstanceOf(NullPointerException.class)
                 .hasNoCause()
                 .hasMessage(null);
+    }
+
+    @Test
+    void should_create_an_ok_result_containing_the_unwrapped_optional_value() {
+        final Optional<Object> optional = Optional.of(value);
+
+        final Result<Object> result = Result.of(optional);
+
+        assertThat(result).isEqualTo(Result.ok(value));
     }
 
     @Test

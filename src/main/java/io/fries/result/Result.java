@@ -1,5 +1,6 @@
 package io.fries.result;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -27,6 +28,11 @@ public interface Result<T> {
         } catch (final Exception error) {
             return error(error);
         }
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    static <T> Result<T> of(final Optional<T> optional) {
+        return ok(optional.get());
     }
 
     static <T> Result<T> ofNullable(final T value) {
