@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -109,6 +110,19 @@ class ResultTest {
         final Result<Object> result = Result.of(optional);
 
         assertThat(result).isEqualTo(Result.ok(value));
+    }
+
+    @Test
+    void should_create_an_error_result_when_unwrapping_an_empty_optional() {
+        final Optional<Object> optional = Optional.empty();
+
+        final Result<Object> result = Result.of(optional);
+
+        final Throwable error = result.getError();
+        assertThat(error)
+                .isInstanceOf(NoSuchElementException.class)
+                .hasNoCause()
+                .hasMessage("No value present when unwrapping the optional");
     }
 
     @Test

@@ -1,5 +1,6 @@
 package io.fries.result;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,7 +33,9 @@ public interface Result<T> {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     static <T> Result<T> of(final Optional<T> optional) {
-        return ok(optional.get());
+        return optional
+                .map(Result::ok)
+                .orElseGet(() -> error(new NoSuchElementException("No value present when unwrapping the optional")));
     }
 
     static <T> Result<T> ofNullable(final T value) {
